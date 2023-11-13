@@ -20,7 +20,8 @@ export function Home() {
         </div>
 
         <div className="right">
-          <h1>Connexion</h1>
+          <Link to="/rh">
+          <h1>Connexion</h1></Link>
           <h2>Projet Compétences</h2>
 
           <Form>
