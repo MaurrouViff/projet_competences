@@ -7,15 +7,15 @@ import {Collaborateur} from "./pages/collaborateur.tsx";
 
 
 function App() {
-    return (
-        <>
-            <Routes>
-                <Route path="/" element={<Home/>}/>
-                <Route path="/rh" element={<Rh/>}/>
-                <Route path="/collaborateur" element={<Collaborateur/>}/>
-            </Routes>
-        </>
-    )
+  return (
+    <>
+        <Routes>
+            <Route path="/" element={<Home/>}/>
+            <Route path="/rh" element={<Rh/>}/>
+            <Route path="/collaborateur" element={<Collaborateur/>}/>
+        </Routes>
+    </>
+  )
 }
 
 export default App
