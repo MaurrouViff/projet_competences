@@ -5,6 +5,7 @@ import {Home} from "./pages/Home.tsx";
 import {Rh} from "./pages/rh/rh.tsx";
 import {Collaborateur} from "./pages/collaborateur/collaborateur.tsx";
 import {Salarie} from "./pages/rh/Salarie.tsx";
+import {About} from "./pages/about.tsx";
 
 
 function App() {
@@ -17,11 +18,11 @@ function App() {
                 <Route path="/rh/salarie" element={<Salarie/>}/>
 
                 <Route path="/collaborateur" element={<Collaborateur/>}/>
+                <Route path="/about" element={<About/>}/>
 
 
             </Routes>
         </>
     )
 }
-
 export default App
