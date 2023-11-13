@@ -46,6 +46,12 @@ nav{
   background: #FF605C
 }
 
+a{
+  color: grey ;
+  text-decoration: none;
+}
+
+
 .nav-buttons > button{
 
   height: 15px;

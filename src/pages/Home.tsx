@@ -2,6 +2,9 @@
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 
+// import react router dom
+import { Link } from "react-router-dom";
+
 // import css
 import "../assets/css/login.css";
 
@@ -27,12 +30,18 @@ export function Home() {
             <Form.Group className="mb-3" controlId="formBasicPassword">
               <Form.Control type="password" placeholder="Mot de passe" />
             </Form.Group>
-            <Button type="submit" variant="light">Connexion</Button>{" "}
+            <Button type="submit" variant="light">
+              Connexion
+            </Button>{" "}
           </Form>
 
+          
+
           <div className="version">
-            <h5>Alpha 0.0.1 - Electron x React </h5>
-            <h5>made by guillaume / delange / aubriet</h5>
+            <Link to="/about">
+              <h5>Alpha 0.0.1 - Electron x React </h5>
+              <h5>made by guillaume / delange / aubriet</h5>
+            </Link>
           </div>
         </div>
       </div>
