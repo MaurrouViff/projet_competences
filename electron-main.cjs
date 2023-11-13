@@ -33,6 +33,7 @@ app.on("ready", () => {
     height: 310,
     transparent: true,
     frame: false,
+    resizable: false,
     alwaysOnTop: true,
   });
   splash.loadURL(`file://${__dirname}/splash.html`);
@@ -53,6 +54,14 @@ app.on("ready", () => {
     setTimeout(() => {
       splash.destroy();
       mainWindow.show();
-    }, 1500);
+    }, 900);
   });
+
+  // if the app cannot load the URL, quit the app
+  mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription, validatedURL, isMainFrame) => {
+    console.error(`Failed to load URL: ${validatedURL} with error: ${errorDescription}`);
+    app.quit();
+  });
+
+
 });
