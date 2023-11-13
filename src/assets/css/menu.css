@@ -1,0 +1,11 @@
+.menu-sandwich p {
+    display: flex;
+    height: 50px;
+    padding: 10px;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    align-self: stretch;
+    margin: 0;
+    font-weight: 500;
+}

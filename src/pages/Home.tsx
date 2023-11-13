@@ -4,6 +4,7 @@ import Form from 'react-bootstrap/Form';
 
 // import css
 import "../assets/css/login.css";
+import {Link} from "react-router-dom";
 
 export function Home() {
   return (
@@ -15,6 +16,7 @@ export function Home() {
                 <h1>Projet Compétences</h1>
                 <p>Connectez-vous</p>
             </section>
+            <Link to="/rh">RH</Link>
         </div>
 
         <div className="right">
