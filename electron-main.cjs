@@ -1,3 +1,5 @@
+
+const path = require("path");
 let splash;
 PORT = 5173;
 const { app, BrowserWindow, ipcMain } = require("electron");
@@ -10,16 +12,14 @@ app.on("ready", () => {
     autoHideMenuBar: true,
     width: 1280,
     height: 720,
-
-    maxHeight: 720,
-    maxWidth: 1280,
-
+    icon: path.join(__dirname + "/public/oasis.png",),
     minHeight: 720,
     minWidth: 1280,
     
     resizable: true,
+    maximizable: true,
 
-    frame: false,
+    frame: true,
     show: false, // don't show the main window
     webPreferences: {
       contextIsolation: false,
@@ -31,6 +31,7 @@ app.on("ready", () => {
   splash = new BrowserWindow({
     width: 810,
     height: 310,
+    icon: path.join(__dirname + "/public/oasis.png",),
     transparent: true,
     frame: false,
     resizable: false,
