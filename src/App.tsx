@@ -4,6 +4,7 @@ import {Routes, Route} from "react-router-dom";
 import {Home} from "./pages/Home.tsx";
 import {Rh} from "./pages/rh.tsx";
 import {Collaborateur} from "./pages/collaborateur.tsx";
+import { About } from './pages/about.tsx';
 
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
             <Route path="/" element={<Home/>}/>
             <Route path="/rh" element={<Rh/>}/>
             <Route path="/collaborateur" element={<Collaborateur/>}/>
+            <Route path="/about" element={<About/>}/>
         </Routes>
     </>
   )
