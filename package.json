@@ -16,8 +16,13 @@
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "react": "^18.2.0",
+<<<<<<< HEAD
     "react-bootstrap": "^2.9.1",
     "react-dom": "^18.2.0"
+=======
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.18.0"
+>>>>>>> 1c7464eeb5e5242308146db1527de0eeb3bca8b1
   },
   "devDependencies": {
     "@types/react": "^18.2.15",
