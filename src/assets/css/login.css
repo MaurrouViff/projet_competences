@@ -1,0 +1,30 @@
+
+body,*{
+    padding: 0;
+    margin: 0;
+    background: #242424;
+    color: white;
+}
+
+h1{
+    font-size: 3.5rem;
+}
+
+.split-screen{
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+}
+
+.left, .right{
+    display: flex;
+    width: 50%;
+    height: auto;
+    padding: 2%;
+
+}
+
+.left{
+    background-color: blueviolet;
+    align-items: center;
+}
