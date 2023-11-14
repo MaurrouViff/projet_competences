@@ -23,6 +23,24 @@ export function Skills() {
                         <h2>Compétences</h2>
                     </div>
 
+                    <div>
+                        <div style={{display: "flex", flexDirection: "column", gap: "8px", borderBottom: "1px solid #000", padding: "8px 30px", margin: "0"}}>
+                            <p style={{fontWeight: "700", fontSize: "20px"}}>Travail en équipe</p>
+                        </div>
+                        <div style={{display: "flex", flexDirection: "column", gap: "8px", borderBottom: "1px solid #000", padding: "8px 30px", margin: "0"}}>
+                            <p style={{fontWeight: "700", fontSize: "20px"}}>Travail en équipe</p>
+                        </div>
+                        <div style={{display: "flex", flexDirection: "column", gap: "8px", borderBottom: "1px solid #000", padding: "8px 30px", margin: "0"}}>
+                            <p style={{fontWeight: "700", fontSize: "20px"}}>Travail en équipe</p>
+                        </div>
+                        <div style={{display: "flex", flexDirection: "column", gap: "8px", borderBottom: "1px solid #000", padding: "8px 30px", margin: "0"}}>
+                            <p style={{fontWeight: "700", fontSize: "20px"}}>Travail en équipe</p>
+                        </div>
+                        <div style={{display: "flex", flexDirection: "column", gap: "8px", borderBottom: "1px solid #000", padding: "8px 30px", margin: "0"}}>
+                            <p style={{fontWeight: "700", fontSize: "20px"}}>Travail en équipe</p>
+                        </div>
+                    </div>
+
                 </div>
             </Layout>
         </div>
