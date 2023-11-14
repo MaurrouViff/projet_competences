@@ -9,10 +9,8 @@ export function Success() {
 
     return (
         <>
-            <div className="about">
-                
-                <Link to="/"> Retour</Link>
-            </div>
+         
+            
         </>
     );
 }

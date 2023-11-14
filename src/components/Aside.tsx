@@ -8,7 +8,7 @@ export function Aside(){
            <div className="top">
                <Link to="/rh">
                    <div className="link">
-                       <img src="/oasis.png" alt=""/>
+                       <img src="/oasis.png"alt=""/>
                    </div>
                </Link>
                <Link to="/rh/salarie">
