@@ -4,9 +4,10 @@ import {Routes, Route} from "react-router-dom";
 import {Home} from "./pages/Home.tsx";
 import {Rh} from "./pages/rh/rh.tsx";
 import {Collaborateur} from "./pages/collaborateur/collaborateur.tsx";
-import {Salarie} from "./pages/rh/Salarie.tsx";
+import {Salarie} from "./pages/rh/params/Salarie.tsx";
 import {About} from "./pages/about.tsx";
-
+import {Skills} from "./pages/rh/params/Skills.tsx";
+import {Evaluations} from "./pages/rh/params/Evaluations.tsx";
 
 function App() {
     return (
@@ -16,13 +17,19 @@ function App() {
 
                 <Route path="/rh" element={<Rh/>}/>
                 <Route path="/rh/salarie" element={<Salarie/>}/>
+                <Route path="/rh/skills" element={<Skills/>}/>
+                <Route path="/rh/add-skills" element={<Skills/>}/>
+                <Route path="/rh/evaluations" element={<Evaluations/>}/>
+                <Route path="/rh/add-eval" element={<Evaluations/>}/>
+
 
                 <Route path="/collaborateur" element={<Collaborateur/>}/>
+
+
                 <Route path="/about" element={<About/>}/>
-
-
             </Routes>
         </>
     )
 }
+
 export default App
