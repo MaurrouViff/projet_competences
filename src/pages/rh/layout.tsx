@@ -17,7 +17,7 @@ export const Layout: React.FC<RootLayoutProps> = ({children}) => {
                 <div className="top">
                     <Link to="/rh">
                         <div className="link">
-                            <img src="/oasis.png" alt="" style={{width: "80px"}}/>
+                            <img src="/oasis.png" alt="" style={{width: "50px"}}/>
                         </div>
                     </Link>
                     <Link to="/rh/salarie">
