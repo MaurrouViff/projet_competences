@@ -6,7 +6,7 @@ import "../assets/css/about.css";
 export function About() {
   return (
     <>
-      <div className="container py-5">
+      <div className="about">
         <h1>About</h1>
         <Link to="/"> Retour</Link>
 
