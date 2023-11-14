@@ -1,4 +1,4 @@
-.menu-sandwich p {
+.menu-sandwich a {
     display: flex;
     height: 50px;
     padding: 10px;
@@ -8,4 +8,6 @@
     align-self: stretch;
     margin: 0;
     font-weight: 500;
+    color: inherit;
+    text-decoration: none;
 }

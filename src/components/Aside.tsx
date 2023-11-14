@@ -1,4 +1,4 @@
-import './aside.css'
+// import './aside.css'
 import {Link} from "react-router-dom";
 import {LogOut, UserCircle2} from "lucide-react";
 
@@ -8,7 +8,7 @@ export function Aside(){
            <div className="top">
                <Link to="/rh">
                    <div className="link">
-                       <img src="/oasis.png" width={"50px"} alt=""/>
+                       <img src="/oasis.png" alt=""/>
                    </div>
                </Link>
                <Link to="/rh/salarie">

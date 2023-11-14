@@ -1,14 +1,15 @@
 import './App.css'
 import {Routes, Route} from "react-router-dom";
 
-import {Home} from "./pages/Home.jsx";
+import {Home} from "./pages/Home.tsx";
 import {Rh} from "./pages/rh/rh.tsx";
+import {Salarie} from "./pages/rh/params/Salarie.tsx";
+import {Skills} from "./pages/rh/params/Skills.tsx";
+import {Evaluations} from "./pages/rh/params/Evaluations.tsx";
+// Pages pour les collaborateurs
 import {Collaborateur} from "./pages/collaborateur/collaborateur.tsx";
 import {Salarie} from "./pages/rh/Salarie.tsx";
 import {About} from "./pages/about.tsx";
-import { Success } from './pages/success.tsx';
-
-import supabase from './lib/supabaseClient.ts';
 
 
 function App() {
@@ -19,15 +20,22 @@ function App() {
 
                 <Route path="/rh" element={<Rh/>}/>
                 <Route path="/rh/salarie" element={<Salarie/>}/>
+                <Route path="/rh/skills" element={<Skills/>}/>
+                <Route path="/rh/add-skills" element={<Skills/>}/>
+                <Route path="/rh/evaluations" element={<Evaluations/>}/>
+                <Route path="/rh/add-eval" element={<Evaluations/>}/>
+
 
                 <Route path="/collaborateur" element={<Collaborateur/>}/>
-                <Route path="/about" element={<About/>}/>
+                <Route path="/collaborateur/skills" element={<SkillsCollaborateur/>}/>
+                <Route path="/collaborateur/eval" element={<EvaluationsCollaborateur/>}/>
 
-                <Route path='/success' element={<Success/>}/>
+                <Route path="/about" element={<About/>}/>
 
 
             </Routes>
         </>
     )
 }
+
 export default App
