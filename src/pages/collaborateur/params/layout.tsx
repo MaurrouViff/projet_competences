@@ -1,4 +1,4 @@
-import {LayoutDashboard} from "lucide-react";
+import {BadgeCheck, LayoutDashboard} from "lucide-react";
 import {Link} from "react-router-dom";
 
 export function LayoutCollaborateur() {
@@ -10,8 +10,9 @@ export function LayoutCollaborateur() {
                     Evaluations
                 </Link>
                 <Link to="/collaborateur/skills">
-                    <LayoutDashboard/>
+                    <BadgeCheck/>
                     Voir les compétences
+
                 </Link>
 
             </div>
