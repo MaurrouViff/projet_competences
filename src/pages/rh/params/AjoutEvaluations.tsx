@@ -1,25 +1,25 @@
 // import {Modal} from "../../../components/Modal.tsx";
-import '../../../assets/css/modal.css'
-import {X} from "lucide-react";
+import "../../../assets/css/modal.css";
+import { X } from "lucide-react";
 
-export function AjoutEvaluations() {
+interface AjoutEvaluationProps {
+  setShowModalEval: (show: boolean) => void;
+}
 
-    return (
-        <>
-            {/*<Modal/>*/}
-            <div className="modal">
-                <div className="container">
-                    <a href="">
-                        <X style={{cursor: "pointer"}}/>
-                    </a>
+export function AjoutEvaluations({ setShowModalEval }: AjoutEvaluationProps) {
+  return (
+    <>
+      {/*<Modal/>*/}
+      <div className="modal">
+        <div className="container">
+          <a href="#" onClick={() => setShowModalEval(false)}>
+            <X style={{ cursor: "pointer" }} />
+          </a>
 
-
-                    <h2>
-                        Ajouter une evaluations
-                    </h2>
-                </div>
-            </div>
-            {/*style={{width: "80vw", height: "80vh", backgroundColor: "#333", position: "absolute", bottom: 0, right: 0}}*/}
-        </>
-    )
+          <h2>Ajouter une évaluation</h2>
+        </div>
+      </div>
+      {/*style={{width: "80vw", height: "80vh", backgroundColor: "#333", position: "absolute", bottom: 0, right: 0}}*/}
+    </>
+  );
 }
