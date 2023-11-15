@@ -60,7 +60,7 @@ export function LayoutRH() {
                     <BadgeCheck/>
                     Compétences
                 </Link>
-                <p onClick={setShowModal}>
+                <p onClick={() => setShowModal(true)}>
                     <PlusSquare/>
                     Ajouter compétences
                 </p>
@@ -68,7 +68,7 @@ export function LayoutRH() {
                     <BadgeCheck/>
                     Evaluations
                 </Link>
-                <p onClick={setShowModalEval}>
+                <p onClick={()=> setShowModalEval(true)}>
                     <PlusSquare/>
                     Ajouter évaluations
                 </p>
