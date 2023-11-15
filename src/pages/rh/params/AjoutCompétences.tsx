@@ -12,7 +12,7 @@ export function AjoutCompetences({ setShowModal }: AjoutCompetencesProps) {
       {/*<Modal/>*/}
       <div className="modal">
         <div className="container">
-          <a href="#" onClick={() => setShowModal(false)}>
+          <a onClick={() => setShowModal(false)}>
             <X style={{ cursor: "pointer" }} />
           </a>
 
