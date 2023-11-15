@@ -2,9 +2,13 @@ import {Layout} from "../layout.tsx";
 import '../../../assets/css/menu.css'
 import '../../../assets/css/salarie.css'
 import {LayoutRH} from "./layout.tsx";
+import {useState} from "react";
+import {Supprimer} from "./supprimer.tsx";
 
 
 export function Evaluations() {
+    const [showModal, setShowModal] = useState(false);
+
     return (
         <div className="skills salarie">
             <Layout>
@@ -25,19 +29,33 @@ export function Evaluations() {
                     </div>
 
                     <div>
-                        <div style={{display: "flex", flexDirection: "row", gap: "8px", borderBottom: "1px solid #000", padding: "8px 30px", margin: "0"}}>
+                        <div
+                            style={{display: "flex", flexDirection: "row", gap: "8px", borderBottom: "1px solid #000", padding: "8px 30px", margin: "0"}}>
                             <p style={{fontWeight: "700", fontSize: "20px", flex: "1"}}>Label évaluation</p>
-                            <button style={{ backgroundColor: "#FFF", border: "1px solid #FF0000", borderRadius: "4px", padding: "8px 16px", color: "#FF0000" }}>Supprimer</button>
+                            <button
+                                style={{backgroundColor: "#FFF", border: "1px solid #FF0000", borderRadius: "4px", padding: "8px 16px", color: "#FF0000"}}
+                                onClick={() => setShowModal(true)}>Supprimer
+                            </button>
                         </div>
-                        <div style={{display: "flex", flexDirection: "row", gap: "8px", borderBottom: "1px solid #000", padding: "8px 30px", margin: "0"}}>
+                        <div
+                            style={{display: "flex", flexDirection: "row", gap: "8px", borderBottom: "1px solid #000", padding: "8px 30px", margin: "0"}}>
                             <p style={{fontWeight: "700", fontSize: "20px", flex: "1"}}>Label évaluation</p>
-                            <button style={{ backgroundColor: "#FFF", border: "1px solid #FF0000", borderRadius: "4px", padding: "8px 16px", color: "#FF0000" }}>Supprimer</button>
+                            <button
+                                style={{backgroundColor: "#FFF", border: "1px solid #FF0000", borderRadius: "4px", padding: "8px 16px", color: "#FF0000"}}
+                                onClick={() => setShowModal(true)}>Supprimer
+                            </button>
                         </div>
-                        <div style={{display: "flex", flexDirection: "row", gap: "8px", borderBottom: "1px solid #000", padding: "8px 30px", margin: "0"}}>
+                        <div
+                            style={{display: "flex", flexDirection: "row", gap: "8px", borderBottom: "1px solid #000", padding: "8px 30px", margin: "0"}}>
                             <p style={{fontWeight: "700", fontSize: "20px", flex: "1"}}>Label évaluation</p>
-                            <button style={{ backgroundColor: "#FFF", border: "1px solid #FF0000", borderRadius: "4px", padding: "8px 16px", color: "#FF0000" }}>Supprimer</button>
+                            <button
+                                style={{backgroundColor: "#FFF", border: "1px solid #FF0000", borderRadius: "4px", padding: "8px 16px", color: "#FF0000"}}
+                                onClick={() => setShowModal(true)}>Supprimer
+                            </button>
                         </div>
                     </div>
+
+                    {showModal && <Supprimer/>}
 
                 </div>
             </Layout>
