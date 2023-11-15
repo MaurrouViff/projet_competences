@@ -15,7 +15,7 @@ export function AjoutEvaluations() {
 
 
                     <h2>
-                        Ajouter une evaluations
+                        Ajouter une évaluation
                     </h2>
                 </div>
             </div>
