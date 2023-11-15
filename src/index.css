@@ -25,6 +25,8 @@
 *{
 
   font-family: Inter;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
 }
 
 nav {
