@@ -22,24 +22,23 @@ export function Home() {
     }, 2000);
   }
 
+  async function signInWithEmail() {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: email,
+      password: password,
+    });
+    if (error) {
+      console.log(error);
+    }
+
+    console.log(data);
+
+  }
+
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-   
-
-    setLoading(true);
-    const { error } = await supabase.auth.signInWithOtp({ email });
-
-    if (error) {
-      alert("Error");
-    } else {
-      alert("Check your email for the login link!");
-    }
-    setLoading(false);
-  };
 
   return (
     <>
@@ -62,23 +61,31 @@ export function Home() {
           </Link>
           <h2>Projet Compétences</h2>
 
-          <form className="form-widget" onSubmit={handleLogin}>
+         
             <div>
               <input
                 className="inputField"
                 type="email"
-                placeholder="Your email"
-                value={email}
+                placeholder="email"
                 required={true}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div>
-              <button className={"button block"} disabled={loading}>
-                {loading ? <span>Loading</span> : <span>Send magic link</span>}
-              </button>
+              <input
+                className="inputField"
+                type="password"
+                placeholder="password"
+                required={true}
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </div>
-          </form>
+            <div>
+              <Button onClick={signInWithEmail} className="button" variant="primary" disabled={loading}>
+                {loading ? "Loading ..." : "Connexion"}
+              </Button>
+            </div>
+    
 
           <div className="version">
             <Link to="/about">
