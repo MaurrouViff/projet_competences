@@ -55,7 +55,7 @@ export function Evaluations() {
                         </div>
                     </div>
 
-                    {showModal && <Supprimer/>}
+                    {showModal && <Supprimer setShowModal={setShowModal}/>}
 
                 </div>
             </Layout>

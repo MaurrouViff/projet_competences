@@ -12,7 +12,7 @@ export function AjoutEvaluations({ setShowModalEval }: AjoutEvaluationProps) {
       {/*<Modal/>*/}
       <div className="modal">
         <div className="container">
-          <a href="#" onClick={() => setShowModalEval(false)}>
+          <a onClick={() => setShowModalEval(false)}>
             <X style={{ cursor: "pointer" }} />
           </a>
 
