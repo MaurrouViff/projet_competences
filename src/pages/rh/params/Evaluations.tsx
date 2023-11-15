@@ -3,6 +3,7 @@ import '../../../assets/css/menu.css'
 import '../../../assets/css/salarie.css'
 import {LayoutRH} from "./layout.tsx";
 
+
 export function Evaluations() {
     return (
         <div className="skills salarie">
@@ -24,17 +25,17 @@ export function Evaluations() {
                     </div>
 
                     <div>
-                        <div style={{display: "flex", flexDirection: "column", gap: "8px", borderBottom: "1px solid #000", padding: "8px 30px", margin: "0"}}>
-                            <p style={{fontWeight: "400"}}>évaluation</p>
-                            <p style={{fontWeight: "700", fontSize: "20px"}}>Label évaluation</p>
+                        <div style={{display: "flex", flexDirection: "row", gap: "8px", borderBottom: "1px solid #000", padding: "8px 30px", margin: "0"}}>
+                            <p style={{fontWeight: "700", fontSize: "20px", flex: "1"}}>Label évaluation</p>
+                            <button style={{ backgroundColor: "#FFF", border: "1px solid #FF0000", borderRadius: "4px", padding: "8px 16px", color: "#FF0000" }}>Supprimer</button>
                         </div>
-                        <div style={{display: "flex", flexDirection: "column", gap: "8px", borderBottom: "1px solid #000", padding: "8px 30px", margin: "0"}}>
-                            <p style={{fontWeight: "400"}}>évaluation</p>
-                            <p style={{fontWeight: "700", fontSize: "20px"}}>Label évaluation</p>
+                        <div style={{display: "flex", flexDirection: "row", gap: "8px", borderBottom: "1px solid #000", padding: "8px 30px", margin: "0"}}>
+                            <p style={{fontWeight: "700", fontSize: "20px", flex: "1"}}>Label évaluation</p>
+                            <button style={{ backgroundColor: "#FFF", border: "1px solid #FF0000", borderRadius: "4px", padding: "8px 16px", color: "#FF0000" }}>Supprimer</button>
                         </div>
-                        <div style={{display: "flex", flexDirection: "column", gap: "8px", borderBottom: "1px solid #000", padding: "8px 30px", margin: "0"}}>
-                            <p style={{fontWeight: "400"}}>évaluation</p>
-                            <p style={{fontWeight: "700", fontSize: "20px"}}>Label évaluation</p>
+                        <div style={{display: "flex", flexDirection: "row", gap: "8px", borderBottom: "1px solid #000", padding: "8px 30px", margin: "0"}}>
+                            <p style={{fontWeight: "700", fontSize: "20px", flex: "1"}}>Label évaluation</p>
+                            <button style={{ backgroundColor: "#FFF", border: "1px solid #FF0000", borderRadius: "4px", padding: "8px 16px", color: "#FF0000" }}>Supprimer</button>
                         </div>
                     </div>
 
