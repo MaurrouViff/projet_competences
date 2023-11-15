@@ -11,6 +11,7 @@ import {Collaborateur} from "./pages/collaborateur/collaborateur.tsx";
 import {About} from "./pages/about.tsx";
 import { SkillsCollaborateur } from './pages/collaborateur/params/Skills.tsx';
 import { EvaluationsCollaborateur } from './pages/collaborateur/params/Evaluations.tsx';
+import {AjoutCompetences} from "./pages/rh/params/AjoutCompétences.tsx";
 
 
 function App() {
@@ -22,9 +23,7 @@ function App() {
                 <Route path="/rh" element={<Rh/>}/>
                 <Route path="/rh/salarie" element={<Salarie/>}/>
                 <Route path="/rh/skills" element={<Skills/>}/>
-                <Route path="/rh/add-skills" element={<Skills/>}/>
                 <Route path="/rh/evaluations" element={<Evaluations/>}/>
-                <Route path="/rh/add-eval" element={<Evaluations/>}/>
 
 
                 <Route path="/collaborateur" element={<Collaborateur/>}/>
