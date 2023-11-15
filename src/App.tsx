@@ -11,8 +11,6 @@ import {Collaborateur} from "./pages/collaborateur/collaborateur.tsx";
 import {About} from "./pages/about.tsx";
 import { SkillsCollaborateur } from './pages/collaborateur/params/Skills.tsx';
 import { EvaluationsCollaborateur } from './pages/collaborateur/params/Evaluations.tsx';
-import {AjoutCompetences} from "./pages/rh/params/AjoutCompétences.tsx";
-
 
 function App() {
     return (
