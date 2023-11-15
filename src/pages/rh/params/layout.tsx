@@ -1,5 +1,8 @@
 import {BadgeCheck, LayoutDashboard, PlusSquare} from "lucide-react";
 import {Link} from "react-router-dom";
+import {useState} from "react";
+import {AjoutCompetences} from "./AjoutCompétences.tsx";
+import {AjoutEvaluations} from "./AjoutEvaluations.tsx";
 // import React, {ReactNode} from "react";
 // import {Layout} from "../layout.tsx";
 //
@@ -44,6 +47,8 @@ import {Link} from "react-router-dom";
 // }
 
 export function LayoutRH() {
+    const [showModal, setShowModal] = useState(false);
+    const [showModalEval, setShowModalEval] = useState(false);
     return (
         <>
             <div style={{width: "300px", backgroundColor: "#F1F5F9", height: "100vh"}} className="menu-sandwich">
@@ -55,19 +60,22 @@ export function LayoutRH() {
                     <BadgeCheck/>
                     Compétences
                 </Link>
-                <Link to="/rh/add-skills">
+                <p onClick={setShowModal}>
                     <PlusSquare/>
                     Ajouter compétences
-                </Link>
+                </p>
                 <Link to="/rh/evaluations">
                     <BadgeCheck/>
                     Evaluations
                 </Link>
-                <Link to="/rh/add-eval">
+                <p onClick={setShowModalEval}>
                     <PlusSquare/>
                     Ajouter évaluations
-                </Link>
+                </p>
             </div>
+
+            {showModal && <AjoutCompetences/>}
+            {showModalEval && <AjoutEvaluations/>}
         </>
 )
 }
