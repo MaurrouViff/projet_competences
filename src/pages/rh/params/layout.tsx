@@ -74,8 +74,8 @@ export function LayoutRH() {
                 </p>
             </div>
 
-            {showModal && <AjoutCompetences/>}
-            {showModalEval && <AjoutEvaluations/>}
+            {showModal && <AjoutCompetences setShowModal={setShowModal}/>}
+            {showModalEval && <AjoutEvaluations setShowModalEval={setShowModalEval}/>}
         </>
 )
 }
