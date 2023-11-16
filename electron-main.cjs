@@ -6,6 +6,8 @@ const { app, BrowserWindow, ipcMain } = require("electron");
 
 const ipc = ipcMain;
 
+app.disableHardwareAcceleration();
+
 app.on("ready", () => {
   // create main browser window
   mainWindow = new BrowserWindow({
@@ -15,7 +17,6 @@ app.on("ready", () => {
     icon: path.join(__dirname + "/public/oasis.png",),
     minHeight: 720,
     minWidth: 1280,
-    
     resizable: true,
     maximizable: true,
 
@@ -27,6 +28,7 @@ app.on("ready", () => {
       nodeIntegration: true,
     },
   });
+
   // create a new `splash`-Window
   splash = new BrowserWindow({
     width: 810,
