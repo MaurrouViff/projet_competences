@@ -2,6 +2,7 @@ import './App.css'
 import {Routes, Route} from "react-router-dom";
 
 import {Home} from "./pages/Home.tsx";
+// Pages pour les RH
 import {Rh} from "./pages/rh/rh.tsx";
 import {Salarie} from "./pages/rh/params/Salarie.tsx";
 import {Skills} from "./pages/rh/params/Skills.tsx";
