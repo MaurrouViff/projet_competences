@@ -9,10 +9,24 @@ import {Evaluations} from "./pages/rh/params/Evaluations.tsx";
 // Pages pour les collaborateurs
 import {Collaborateur} from "./pages/collaborateur/collaborateur.tsx";
 import {About} from "./pages/about.tsx";
-import { SkillsCollaborateur } from './pages/collaborateur/params/Skills.tsx';
-import { EvaluationsCollaborateur } from './pages/collaborateur/params/Evaluations.tsx';
+import {SkillsCollaborateur} from './pages/collaborateur/params/Skills.tsx';
+import {EvaluationsCollaborateur} from './pages/collaborateur/params/Evaluations.tsx';
+import {useEffect} from "react";
+import supabase from "./lib/supabaseClient.ts";
 
 function App() {
+    useEffect(() => {
+        async function getSession() {
+            const {data, error} = await supabase.auth.getSession()
+            if (error) {
+                console.log(error);
+            }
+            console.log(data)
+        }
+
+        getSession()
+    }, []);
+
     return (
         <>
             <Routes>
@@ -29,8 +43,6 @@ function App() {
                 <Route path="/collaborateur/eval" element={<EvaluationsCollaborateur/>}/>
 
                 <Route path="/about" element={<About/>}/>
-
-
             </Routes>
         </>
     )
