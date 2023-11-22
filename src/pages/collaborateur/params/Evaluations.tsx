@@ -10,7 +10,7 @@ export function EvaluationsCollaborateur() {
             <Layout>
                 <LayoutCollaborateur/>
 
-                <div style={{backgroundColor: "#FFF", width: "100%"}}>
+                <div style={{backgroundColor: "#FFF", width: "100%", overflowY: "auto", height: "100vh"}}>
                     <div style={{
                         height: "100px",
                         width: "100%",
