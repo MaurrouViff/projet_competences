@@ -2,6 +2,7 @@ import '../../assets/css/aside.css'
 import React, {ReactNode} from "react";
 import {Link} from "react-router-dom";
 import {LogOut, UserCircle2} from "lucide-react";
+import supabase from "../../lib/supabaseClient.ts";
 
 
 interface RootLayoutProps {
@@ -9,6 +10,13 @@ interface RootLayoutProps {
 }
 
 export const Layout: React.FC<RootLayoutProps> = ({children}) => {
+    // MANAGE LOGOUT SESSION
+    const logOut = async () => {
+        let { error } = await supabase.auth.signOut()
+        if (error) {
+            console.log(error)
+        }
+    }
     return (
         <html lang="fr">
         <body>
@@ -28,7 +36,7 @@ export const Layout: React.FC<RootLayoutProps> = ({children}) => {
                 </div>
 
 
-                <Link to="/">
+                <Link to="/" onClick={logOut}>
                     <div className="link">
                         <LogOut  size={40}/>
                     </div>

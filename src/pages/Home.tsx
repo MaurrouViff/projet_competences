@@ -1,8 +1,7 @@
 // import button from bootstrap
 import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 // importing supabase
 import supabase from "../lib/supabaseClient";
@@ -14,13 +13,6 @@ import { Link } from "react-router-dom";
 import "../assets/css/login.css";
 
 export function Home() {
-  function test() {
-    const welcome = document.getElementById("welcome");
-    welcome?.style.setProperty("display", "block");
-    setTimeout(() => {
-      welcome?.style.setProperty("display", "none");
-    }, 2000);
-  }
 
   async function signInWithEmail() {
     const { data, error } = await supabase.auth.signInWithPassword({
@@ -30,15 +22,13 @@ export function Home() {
     if (error) {
       console.log(error);
     }
-
     console.log(data);
-
+    setLoading(false)
   }
 
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
 
   return (
     <>
