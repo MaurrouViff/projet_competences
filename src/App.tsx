@@ -13,10 +13,13 @@ import {Evaluations} from "./pages/rh/params/Evaluations.tsx";
 
 // Pages pour les collaborateurs
 import {Collaborateur} from "./pages/collaborateur/collaborateur.tsx";
+
+
 import {SkillsCollaborateur} from './pages/collaborateur/params/Skills.tsx';
 import {EvaluationsCollaborateur} from './pages/collaborateur/params/Evaluations.tsx';
 
 import {About} from "./pages/about.tsx";
+
 
 function App() {
     const [userId, setUserId] = useState()
@@ -28,7 +31,9 @@ function App() {
                 console.log(error);
             }
             console.log(data)
+
             setUserId(data.session.user.id)
+
         }
 
         getSession()
