@@ -13,13 +13,13 @@ interface Skills {
 
 export function Skills() {
     const [showModal, setShowModal] = useState(false);
-
-    const [skills, setSkills] = useState<Skills[] | null>(null);
+    // <Skills[] | null>
+    const [skills, setSkills] = useState(null);
 
     useEffect(() => {
         async function readSkills() {
             let {data: competence, error} = await supabase
-                .from('competence')
+                .from('comp')
                 .select('*')
 
             if (error) {
@@ -54,7 +54,7 @@ export function Skills() {
 
                     <div>
                         {skills?.map(skill => (
-                            <div key={skill.idcompetence}
+                            <div
                                  style={{
                                      display: "flex",
                                      flexDirection: "row",
@@ -65,7 +65,7 @@ export function Skills() {
                                  }}
                             >
                                 <p style={{fontWeight: "700", fontSize: "20px", flex: "1"}}>
-                                    {skill.titre}
+                                    {skill.nom_competence}
                                 </p>
                                 <button
                                     style={{
