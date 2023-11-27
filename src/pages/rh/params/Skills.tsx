@@ -55,14 +55,14 @@ export function Skills() {
                     <div>
                         {skills?.map(skill => (
                             <div
-                                 style={{
-                                     display: "flex",
-                                     flexDirection: "row",
-                                     gap: "8px",
-                                     borderBottom: "1px solid #000",
-                                     padding: "8px 30px",
-                                     margin: "0",
-                                 }}
+                                style={{
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    gap: "8px",
+                                    borderBottom: "1px solid #000",
+                                    padding: "8px 30px",
+                                    margin: "0",
+                                }}
                             >
                                 <p style={{fontWeight: "700", fontSize: "20px", flex: "1"}}>
                                     {skill.nom_competence}
