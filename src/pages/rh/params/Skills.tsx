@@ -48,18 +48,6 @@ export function Skills() {
                     <p style={{ fontWeight: "700", fontSize: "20px", flex: "1" }}>
                         {skill.titre}
                     </p>
-                    <button
-                        style={{
-                            backgroundColor: "#FFF",
-                            border: "1px solid #FF0000",
-                            borderRadius: "4px",
-                            padding: "8px 16px",
-                            color: "#FF0000",
-                        }}
-                        onClick={() => setShowModal(true)}
-                    >
-                        Supprimer
-                    </button>
                 </div>
             ));
         } else {
