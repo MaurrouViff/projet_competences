@@ -16,3 +16,12 @@
     font-weight: 300;
     font-size: 40px;
 }
+.select-rh {
+    width: 22%;
+}
+.select-rh:hover {
+    cursor: pointer;
+    background-color: black;
+    color: white;
+}
+

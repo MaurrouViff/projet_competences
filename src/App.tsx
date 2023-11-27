@@ -1,9 +1,10 @@
 import './App.css'
 import {Routes, Route} from "react-router-dom";
 import {useEffect, useState} from "react";
-import supabase from "./lib/supabaseClient.ts";
+
 
 import {Home} from "./pages/Home.tsx";
+
 
 // Pages pour les RH
 import {Rh} from "./pages/rh/rh.tsx";
@@ -18,7 +19,13 @@ import {Collaborateur} from "./pages/collaborateur/collaborateur.tsx";
 import {SkillsCollaborateur} from './pages/collaborateur/params/Skills.tsx';
 import {EvaluationsCollaborateur} from './pages/collaborateur/params/Evaluations.tsx';
 
+// import pour le projet global
+
+import supabase from "./lib/supabaseClient.ts";
+
+
 import {About} from "./pages/about.tsx";
+
 
 
 function App() {

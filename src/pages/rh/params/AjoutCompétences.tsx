@@ -1,25 +1,116 @@
-// import {Modal} from "../../../components/Modal.tsx";
-import "../../../assets/css/modal.css";
+import { useEffect, useState } from "react";
+import Form from 'react-bootstrap/Form';
 import { X } from "lucide-react";
+import supabase from "../../../lib/supabaseClient.ts";
+
+interface comp {
+    id_competence: number;
+    nom_competence: string;
+}
+
+interface Salarie {
+    idsalarie: number;
+    nom: string;
+    prenom: string;
+}
 
 interface AjoutCompetencesProps {
-  setShowModal: (show: boolean) => void;
+    setShowModal: (show: boolean) => void;
 }
 
 export function AjoutCompetences({ setShowModal }: AjoutCompetencesProps) {
-  return (
-    <>
-      {/*<Modal/>*/}
-      <div className="modal">
-        <div className="container">
-          <a onClick={() => setShowModal(false)}>
-            <X style={{ cursor: "pointer" }} />
-          </a>
+    const [competences, setCompetences] = useState<comp[]>([]);
+    const [salaries, setSalaries] = useState<Salarie[]>([]);
 
-          <h2>Ajouter une compétence</h2>
-        </div>
-      </div>
-      {/*style={{width: "80vw", height: "80vh", backgroundColor: "#333", position: "absolute", bottom: 0, right: 0}}*/}
-    </>
-  );
+    useEffect(() => {
+        // Charger les compétences depuis Supabase
+        async function chargerCompetences() {
+            try {
+                const { data, error } = await supabase
+                    .from('comp')
+                    .select('id_competence, nom_competence');
+
+                if (error) {
+                    console.error('Erreur lors du chargement des compétences depuis Supabase:', error);
+                    return;
+                }
+
+                // Mettre à jour l'état local avec les compétences
+                setCompetences(data as comp[]);
+            } catch (error) {
+                console.error('Erreur lors du chargement des compétences depuis Supabase:', error);
+            }
+        }
+
+        // Charger les employés depuis Supabase
+        async function chargerSalaries() {
+            try {
+                const { data, error } = await supabase
+                    .from('salarie')
+                    .select('idsalarie, nom, prenom');
+
+                if (error) {
+                    console.error('Erreur lors du chargement des employés depuis Supabase:', error);
+                    return;
+                }
+
+                // Mettre à jour l'état local avec les employés
+                setSalaries(data as Salarie[]);
+            } catch (error) {
+                console.error('Erreur lors du chargement des employés depuis Supabase:', error);
+            }
+        }
+
+        // Appeler les fonctions pour charger les compétences et les employés lors du montage du composant
+        chargerCompetences();
+        chargerSalaries();
+    }, []); // Le tableau vide assure que l'effet ne se déclenche qu'une seule fois au montage
+
+    return (
+        <>
+            <div className="modal">
+                <div className="container">
+                    <a onClick={() => setShowModal(false)}>
+                        <X style={{ cursor: "pointer" }} />
+                    </a>
+
+                    <h2>Ajouter une compétence</h2>
+                    <p>Nom de l'évaluation :</p>
+                    <SelectCompetenceRH competences={competences} />
+                    <p>Nom de l'employé :</p>
+                    <SelectEmployeRH salaries={salaries} />
+                </div>
+            </div>
+        </>
+    );
+}
+
+interface SelectCompetenceRHProps {
+    competences: comp[];
+}
+
+function SelectCompetenceRH({ competences }: SelectCompetenceRHProps) {
+    return (
+        <Form.Select className="select-rh">
+            <option>Sélectionner votre évaluation</option>
+            {competences.map((comp) => (
+                <option key={comp.id_competence}>{comp.nom_competence}</option>
+            ))}
+        </Form.Select>
+    );
+}
+
+interface SelectEmployeRHProps {
+    salaries: Salarie[];
+}
+
+function SelectEmployeRH({ salaries }: SelectEmployeRHProps) {
+    return (
+        <Form.Select className="select-rh">
+            <option>Sélectionner l'employé</option>
+            {salaries.map((salarie) => (
+                <option key={salarie.idsalarie}>{`${salarie.prenom} ${salarie.nom}`}</option>
+            ))}
+        </Form.Select>
+    );
 }
