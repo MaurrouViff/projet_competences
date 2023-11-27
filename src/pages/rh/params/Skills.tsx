@@ -25,7 +25,7 @@ export function Skills() {
             if (error) {
                 console.log(error);
             }
-            return setSkills(competence)
+            return setSkills(competence);
         }
 
         readSkills();
@@ -79,6 +79,7 @@ export function Skills() {
                                 >
                                     Supprimer
                                 </button>
+
                             </div>
                         ))}
                     </div>
