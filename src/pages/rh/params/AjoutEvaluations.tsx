@@ -81,7 +81,18 @@ export function AjoutEvaluations({ setShowModalEval }: AjoutEvaluationProps) {
             <SelectEvaluationsRH evaluations={evaluations} />
             <p>Nom de l'employé :</p>
             <SelectEmployeRH salaries={salaries} />
+            <div>
+              <button
+                  style={{backgroundColor: "#FFF", border: "1px solid #002aff", borderRadius: "4px", padding: "8px 16px", color: "#002aff"}}
+                  onClick={() => setShowModalEval(false)}>Annuler
+              </button>
+              <button
+                  style={{backgroundColor: "#FFF", border: "1px solid #1cff00", borderRadius: "4px", padding: "8px 16px", color: "#1cff00"}}
+                  onClick={() => setShowModalEval(false)}>Valider
+              </button>
+            </div>
           </div>
+
         </div>
       </>
   );

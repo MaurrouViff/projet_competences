@@ -79,6 +79,16 @@ export function AjoutCompetences({ setShowModal }: AjoutCompetencesProps) {
                     <SelectCompetenceRH competences={competences} />
                     <p>Nom de l'employé :</p>
                     <SelectEmployeRH salaries={salaries} />
+                    <div>
+                        <button
+                            style={{backgroundColor: "#FFF", border: "1px solid #002aff", borderRadius: "4px", padding: "8px 16px", color: "#002aff"}}
+                            onClick={() => setShowModal(false)}>Annuler
+                        </button>
+                        <button
+                            style={{backgroundColor: "#FFF", border: "1px solid #1cff00", borderRadius: "4px", padding: "8px 16px", color: "#1cff00"}}
+                            onClick={() => setShowModal(false)}>Valider
+                        </button>
+                    </div>
                 </div>
             </div>
         </>
@@ -114,3 +124,4 @@ function SelectEmployeRH({ salaries }: SelectEmployeRHProps) {
         </Form.Select>
     );
 }
+
