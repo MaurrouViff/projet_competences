@@ -59,7 +59,7 @@ export function Evaluations() {
                         }}
                         onClick={() => setShowModal(true)}
                     >
-                        Supprimer
+                        Supprimerr
                     </button>
                 </div>
             ));
