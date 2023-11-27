@@ -7,12 +7,14 @@ interface Salarie {
   idsalarie: number;
   nom: string;
   prenom: string;
+
 }
 
 interface Evaluations {
   idevaluation: number;
   nom: string;
   remarque: string;
+  idsalarie: number;
 }
 
 interface AjoutEvaluationProps {
@@ -27,7 +29,7 @@ export function AjoutEvaluations({ setShowModalEval }: AjoutEvaluationProps) {
     async function chargerEvaluations() {
       try {
         const { data, error } = await supabase
-            .from('evaluations')
+            .from('evaluation')
             .select('idevaluation, nom, remarque');
 
         if (error) {
@@ -105,12 +107,12 @@ interface SelectEvaluationsRHProps {
 }
 
 function SelectEvaluationsRH({ evaluations }: SelectEvaluationsRHProps) {
-  return (
-      <Form.Select className="select-rh">
-        <option>Sélectionner l'évaluation</option>
-        {evaluations.map((evaluation) => (
-            <option key={evaluation.idevaluation}>{evaluation.nom}</option>
-        ))}
-      </Form.Select>
-  );
+    return (
+        <Form.Select className="select-rh">
+          <option>Sélectionner l'évaluation</option>
+          {evaluations.map((evaluation) => (
+            <option key={evaluation.idevaluation}>{`${evaluation.nom}`}</option>
+          ))}
+        </Form.Select>
+    );
 }
