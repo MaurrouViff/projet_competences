@@ -17,7 +17,7 @@ interface Evaluation {
 export function Evaluations() {
     const [showModal, setShowModal] = useState(false);
 
-    const [evalutations, setEvaluations] = useState<Evaluation[] | null>(null);
+    const [evaluations, setEvaluations] = useState<Evaluation[] | null>(null);
 
     useEffect(() => {
         async function readEvaluation() {
@@ -28,7 +28,7 @@ export function Evaluations() {
             if (error) {
                 console.log(error);
             }
-            return setEvaluations(evaluation)
+            return setEvaluations(evaluation);
         }
         readEvaluation();
     }, []);
@@ -53,7 +53,7 @@ export function Evaluations() {
                     </div>
 
                     <div>
-                        {evalutations && evalutations.map(evaluation => (
+                        {evaluations && evaluations.map(evaluation => (
                             <div
                                 key={evaluation.idevaluation}
                                 style={{display: "flex", flexDirection: "row", gap: "8px", borderBottom: "1px solid #000", padding: "8px 30px", margin: "0"}}>
@@ -62,6 +62,7 @@ export function Evaluations() {
                                     style={{backgroundColor: "#FFF", border: "1px solid #FF0000", borderRadius: "4px", padding: "8px 16px", color: "#FF0000"}}
                                     onClick={() => setShowModal(true)}>Supprimer
                                 </button>
+
                             </div>
                         ))}
                     </div>
