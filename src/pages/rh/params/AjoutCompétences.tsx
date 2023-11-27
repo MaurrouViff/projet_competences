@@ -108,6 +108,7 @@ export function AjoutCompetences({ setShowModal }: AjoutCompetencesProps) {
       </div>
     </>
   );
+
 }
 
 interface SelectCompetenceRHProps {
@@ -160,3 +161,4 @@ function SelectEmployeRH({ salaries }: SelectEmployeRHProps) {
     </Form.Select>
   );
 }
+
