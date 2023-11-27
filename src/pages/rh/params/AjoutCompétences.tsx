@@ -3,9 +3,9 @@ import Form from 'react-bootstrap/Form';
 import { X } from "lucide-react";
 import supabase from "../../../lib/supabaseClient.ts";
 
-interface Competence {
-    idcompetence: number;
-    titre: string;
+interface comp {
+    id_competence: number;
+    nom_competence: string;
 }
 
 interface Salarie {
@@ -19,7 +19,7 @@ interface AjoutCompetencesProps {
 }
 
 export function AjoutCompetences({ setShowModal }: AjoutCompetencesProps) {
-    const [competences, setCompetences] = useState<Competence[]>([]);
+    const [competences, setCompetences] = useState<comp[]>([]);
     const [salaries, setSalaries] = useState<Salarie[]>([]);
 
     useEffect(() => {
@@ -27,8 +27,8 @@ export function AjoutCompetences({ setShowModal }: AjoutCompetencesProps) {
         async function chargerCompetences() {
             try {
                 const { data, error } = await supabase
-                    .from('competence')
-                    .select('idcompetence, titre');
+                    .from('comp')
+                    .select('id_competence, nom_competence');
 
                 if (error) {
                     console.error('Erreur lors du chargement des compétences depuis Supabase:', error);
@@ -36,7 +36,7 @@ export function AjoutCompetences({ setShowModal }: AjoutCompetencesProps) {
                 }
 
                 // Mettre à jour l'état local avec les compétences
-                setCompetences(data as Competence[]);
+                setCompetences(data as comp[]);
             } catch (error) {
                 console.error('Erreur lors du chargement des compétences depuis Supabase:', error);
             }
@@ -86,15 +86,15 @@ export function AjoutCompetences({ setShowModal }: AjoutCompetencesProps) {
 }
 
 interface SelectCompetenceRHProps {
-    competences: Competence[];
+    competences: comp[];
 }
 
 function SelectCompetenceRH({ competences }: SelectCompetenceRHProps) {
     return (
         <Form.Select className="select-rh">
             <option>Sélectionner votre évaluation</option>
-            {competences.map((competence) => (
-                <option key={competence.idcompetence}>{competence.titre}</option>
+            {competences.map((comp) => (
+                <option key={comp.id_competence}>{comp.nom_competence}</option>
             ))}
         </Form.Select>
     );
