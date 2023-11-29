@@ -9,14 +9,16 @@ import supabase from "../../../lib/supabaseClient.ts";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
+interface Skills {
+    idcompetence: number;
+    titre: string;
+    nom_domaine: string;
+    nom_competence: string;
+    nom_bloc: string;
+}
+
 export function SkillsCollaborateur() {
-    interface Skills {
-        idcompetence: number;
-        titre: string;
-        nom_domaine: string;
-        nom_competence: string;
-        nom_bloc: string;
-    }
+
 
     const [showModal, setShowModal] = useState(false);
     const [skills, setSkills] = useState<Skills[] | null>(null);
@@ -152,7 +154,7 @@ export function SkillsCollaborateur() {
         </div>
     );
 }
-
+import { Form } from "react-bootstrap";
 function SelectCollaboSkills() {
     return (
         <>
