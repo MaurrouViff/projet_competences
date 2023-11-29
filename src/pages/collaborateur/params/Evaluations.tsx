@@ -1,8 +1,10 @@
+// EvaluationsCollaborateur.tsx
 import { Layout } from "../layout.tsx";
 import "../../../assets/css/menu.css";
 import "../../../assets/css/salarie.css";
 import "../../../assets/css/collabo.css";
 import { LayoutCollaborateur } from "./layout.tsx";
+
 import { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import supabase from "../../../lib/supabaseClient.ts";
@@ -42,6 +44,7 @@ export function EvaluationsCollaborateur() {
             return evaluations?.map((evaluation) => (
                 <div
                     key={evaluation.idevaluation}
+                    onClick={() => setShowModal(true)}
                     style={{
                         display: "flex",
                         flexDirection: "row",
@@ -49,12 +52,12 @@ export function EvaluationsCollaborateur() {
                         borderBottom: "1px solid #000",
                         padding: "8px 30px",
                         margin: "0",
+                        cursor: "pointer", // Ajouté pour indiquer que cet élément est cliquable
                     }}
                 >
                     <p style={{ fontWeight: "700", fontSize: "20px", flex: "1" }}>
                         {evaluation.nom}
                     </p>
-
                 </div>
             ));
         } else {

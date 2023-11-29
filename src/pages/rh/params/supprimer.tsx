@@ -3,7 +3,7 @@ import "../../../assets/css/modal.css";
 import { X } from "lucide-react";
 
 export function Supprimer({
-  setShowModal,
+  setShowModal
 }: {
   setShowModal: (show: boolean) => void;
 }) {
