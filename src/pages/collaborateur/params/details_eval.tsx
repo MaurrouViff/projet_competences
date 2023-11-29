@@ -2,10 +2,14 @@
 import "../../../assets/css/modal.css";
 import { X } from "lucide-react";
 
-export function Supprimer({
-  setShowModal
+export function Details_Eval({
+  setShowModal,
+  evalID
+  // parameters
 }: {
   setShowModal: (show: boolean) => void;
+  evalID: string;
+  // define type for parameters
 }) {
   return (
     <>
@@ -16,7 +20,7 @@ export function Supprimer({
             <X style={{ cursor: "pointer" }} />
           </a>
 
-          <h2>Suppression</h2>
+          <h2>{evalID}</h2>
         </div>
       </div>
       {/*style={{width: "80vw", height: "80vh", backgroundColor: "#333", position: "absolute", bottom: 0, right: 0}}*/}
