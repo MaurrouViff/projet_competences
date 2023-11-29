@@ -24,4 +24,9 @@
     background-color: black;
     color: white;
 }
+.select-rh option {
+    cursor: pointer;
+    background-color: black;
+    color: white;
+}
 
