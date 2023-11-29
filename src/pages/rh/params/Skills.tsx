@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import { Supprimer } from "./supprimer.tsx";
 import supabase from "../../../lib/supabaseClient.ts";
 
+import { Details_Eval } from "./details_eval.tsx";
+
 interface Skills {
   idcompetence: number;
   titre: string;
@@ -13,6 +15,9 @@ interface Skills {
 
 export function Skills() {
   const [showModal, setShowModal] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
+  const [selected, setSelected] = useState<number | null>(null);
+
   // <Skills[] | null>
   const [skills, setSkills] = useState(null);
 
@@ -28,7 +33,6 @@ export function Skills() {
 
     readSkills();
   }, []);
-
   function renderSkills() {
     if (skills && skills.length > 0) {
       return skills?.map((skill, index) => (
@@ -43,9 +47,13 @@ export function Skills() {
             margin: "0",
           }}
         >
-          <p style={{ fontWeight: "700", fontSize: "20px", flex: "1" }}>
-            {skill.nom_competence}
-          </p>
+          <div className="div">
+            <p style={{ fontWeight: "600" }}>{skill.nom_domaine}</p>
+            <p style={{ fontWeight: "400" }}>{skill.nom_bloc}</p>
+            <p style={{ fontWeight: "700", fontSize: "20px" }}>
+              {skill.nom_competence}
+            </p>
+          </div>
         </div>
       ));
     } else {
@@ -56,6 +64,7 @@ export function Skills() {
       );
     }
   }
+
 
   return (
     <div className="skills salarie">
@@ -88,6 +97,7 @@ export function Skills() {
           <div>{renderSkills()}</div>
 
           {showModal && <Supprimer setShowModal={setShowModal} />}
+          {showDetails && <Details_Eval setShowDetails={setShowDetails} evalID={selected} />}
         </div>
       </Layout>
     </div>
