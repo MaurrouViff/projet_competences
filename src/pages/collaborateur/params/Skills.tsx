@@ -9,11 +9,16 @@ import { useEffect, useState } from "react";
 // import supabase
 import supabase from "../../../lib/supabaseClient.ts";
 
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+
 export function SkillsCollaborateur() {
   interface Skills {
     idcompetence: number;
     titre: string;
     nom_domaine: string;
+    nom_competence: string;
+    nom_bloc: string;
   }
 
   const [showModal, setShowModal] = useState(false);
@@ -23,17 +28,52 @@ export function SkillsCollaborateur() {
 
   useEffect(() => {
     async function readEvaluation() {
-      let { data: skills, error } = await supabase
-        .from("comp")
-        .select("*");
+      let { data: skills, error } = await supabase.from("comp").select("*");
 
       if (error) {
         console.log(error);
       }
+      console.log(skills);
       return setSkills(skills);
     }
     readEvaluation();
   }, []);
+
+  async function exportSkillsToPDF() {
+    console.log("exporting to PDF...");
+    const doc = new jsPDF();
+  
+    // Set the font
+    doc.setFont("Helvetica", "normal");
+  
+    const tableColumn = ["Bloc", "Domaine", "Compétence"];
+    const tableRows: (string | number)[][] = [];
+  
+    skills?.forEach((skill) => {
+      const skillData = [
+        skill.nom_bloc.normalize(),
+        skill.nom_domaine.normalize(),
+        skill.nom_competence.normalize(),
+      ];
+      tableRows.push(skillData);
+    });
+  
+    autoTable(doc, {
+      head: [tableColumn],
+      body: tableRows,
+      startY: 30,
+      didDrawPage: (data) => {
+        // Adding header
+        const title = "Projet Compétences";
+        const date = new Date().toLocaleDateString();
+        doc.text(title, data.settings.margin.left, 10);
+        doc.text(date, data.settings.margin.left, 20);
+      },
+    });
+  
+    const fileName = `compétences-${Date.now()}.pdf`;
+    doc.save(fileName);
+  }
 
   function renderSkills() {
     if (skills && skills.length > 0) {
@@ -94,6 +134,13 @@ export function SkillsCollaborateur() {
           >
             <h2>Tirage par compétences</h2>
             <SelectCollaboSkills />
+            <button
+              className="btn btn-outline-dark"
+              type="button"
+              onClick={exportSkillsToPDF}
+            >
+              Export PDF
+            </button>
           </div>
           <h2>Résultat de la recherche</h2>
           <div>
