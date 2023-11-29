@@ -17,6 +17,7 @@ interface Evaluation {
 
 export function EvaluationsCollaborateur() {
   const [showModal, setShowModal] = useState(false);
+  const [selectedEvalID, setSelectedEval] = useState<number | null>(null);
 
   const [evaluations, setEvaluations] = useState<Evaluation[] | null>(null);
 
@@ -38,6 +39,10 @@ export function EvaluationsCollaborateur() {
     if (evaluations && evaluations.length > 0) {
       return evaluations?.map((evaluation) => (
         <div
+        onClick={() => {
+          setShowModal(true);
+          setSelectedEval(evaluation.idevaluation);
+        }}
           key={evaluation.idevaluation}
           style={{
             display: "flex",
@@ -93,7 +98,7 @@ export function EvaluationsCollaborateur() {
           <div>
            {renderEvaluation()}
           </div>
-          {showModal && <Details_Eval setShowModal={setShowModal} />}
+          {showModal && <Details_Eval setShowModal={setShowModal} evalID={selectedEvalID} />}
         </div>
       </Layout>
     </div>

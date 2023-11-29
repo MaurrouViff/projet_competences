@@ -20,7 +20,7 @@ export function Details_Eval({
             <X style={{ cursor: "pointer" }} />
           </a>
 
-          <h2>{evalID}</h2>
+          <h2>let's build from here ({evalID})</h2>
         </div>
       </div>
       {/*style={{width: "80vw", height: "80vh", backgroundColor: "#333", position: "absolute", bottom: 0, right: 0}}*/}
