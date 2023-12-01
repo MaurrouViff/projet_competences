@@ -15,8 +15,6 @@ interface Evaluation {
 }
 
 export function Evaluations() {
-
-
   const [showModal, setShowModal] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
 
@@ -101,7 +99,9 @@ export function Evaluations() {
           <div>{renderEvaluation()}</div>
 
           {showModal && <Supprimer setShowModal={setShowModal} />}
-          {showDetails && <Details_Eval setShowModal={setShowDetails} evalID={selectedEval} />}
+          {showDetails && (
+            <Details_Eval setShowModal={setShowDetails} evalID={selectedEval} />
+          )}
         </div>
       </Layout>
     </div>
