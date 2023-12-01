@@ -9,6 +9,8 @@ window.onload = function() {
     
   }
 
+
+
 console.log("Loaded App Functions");
 
 // Close app
