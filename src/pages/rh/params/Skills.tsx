@@ -97,7 +97,7 @@ export function Skills() {
           <div>{renderSkills()}</div>
 
           {showModal && <Supprimer setShowModal={setShowModal} />}
-          {showDetails && <Details_Eval setShowDetails={setShowDetails} evalID={selected} />}
+          
         </div>
       </Layout>
     </div>

@@ -26,6 +26,7 @@ export function Details_Eval({
   const [selectedEval, setSelectedEval] = useState<Evaluation | null>(null);
   const [loading, setLoading] = useState(true);
 
+  console.log(evalID);
   useEffect(() => {
     async function readEvaluation() {
       let { data: evaluation, error } = await supabase
