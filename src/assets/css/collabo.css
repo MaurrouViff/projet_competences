@@ -1,5 +1,15 @@
 /* Style du select */
 .select-collabo {
-    width: 20%;
+    width: 22%;
     margin-left: 20px;
+}
+.select-collabo:hover {
+    cursor: pointer;
+    background-color: black;
+    color: white;
+}
+.select-collabo option {
+    cursor: pointer;
+    background-color: black;
+    color: white;
 }

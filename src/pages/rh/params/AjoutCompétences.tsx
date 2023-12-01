@@ -6,6 +6,8 @@ import supabase from "../../../lib/supabaseClient.ts";
 interface comp {
   id_competence: number;
   nom_competence: string;
+  nom_bloc: string;
+  nom_domaine: string;
 }
 
 interface Salarie {
@@ -21,19 +23,20 @@ interface AjoutCompetencesProps {
 export function AjoutCompetences({ setShowModal }: AjoutCompetencesProps) {
   const [competences, setCompetences] = useState<comp[]>([]);
   const [salaries, setSalaries] = useState<Salarie[]>([]);
+  const [selectedBloc, setSelectedBloc] = useState<string | null>(null);
 
   useEffect(() => {
     // Charger les compétences depuis Supabase
     async function chargerCompetences() {
       try {
         const { data, error } = await supabase
-          .from("comp")
-          .select("id_competence, nom_competence");
+            .from("comp")
+            .select("id_competence, nom_competence, nom_bloc");
 
         if (error) {
           console.error(
-            "Erreur lors du chargement des compétences depuis Supabase:",
-            error
+              "Erreur lors du chargement des compétences depuis Supabase:",
+              error
           );
           return;
         }
@@ -42,8 +45,8 @@ export function AjoutCompetences({ setShowModal }: AjoutCompetencesProps) {
         setCompetences(data as comp[]);
       } catch (error) {
         console.error(
-          "Erreur lors du chargement des compétences depuis Supabase:",
-          error
+            "Erreur lors du chargement des compétences depuis Supabase:",
+            error
         );
       }
     }
@@ -52,13 +55,13 @@ export function AjoutCompetences({ setShowModal }: AjoutCompetencesProps) {
     async function chargerSalaries() {
       try {
         const { data, error } = await supabase
-          .from("salarie")
-          .select("idsalarie, nom, prenom");
+            .from("salarie")
+            .select("idsalarie, nom, prenom");
 
         if (error) {
           console.error(
-            "Erreur lors du chargement des employés depuis Supabase:",
-            error
+              "Erreur lors du chargement des employés depuis Supabase:",
+              error
           );
           return;
         }
@@ -67,8 +70,8 @@ export function AjoutCompetences({ setShowModal }: AjoutCompetencesProps) {
         setSalaries(data as Salarie[]);
       } catch (error) {
         console.error(
-          "Erreur lors du chargement des employés depuis Supabase:",
-          error
+            "Erreur lors du chargement des employés depuis Supabase:",
+            error
         );
       }
     }
@@ -78,37 +81,67 @@ export function AjoutCompetences({ setShowModal }: AjoutCompetencesProps) {
     chargerSalaries();
   }, []); // Le tableau vide assure que l'effet ne se déclenche qu'une seule fois au montage
 
+  const blocs = [...new Set(competences.map((comp) => comp.nom_bloc))];
+
+  const handleChangeBloc = (
+      event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const selectedBloc = event.target.value;
+    setSelectedBloc(selectedBloc === "Sélectionner un bloc" ? null : selectedBloc);
+  };
+
+  const competencesFiltrees = selectedBloc
+      ? competences.filter((comp) => comp.nom_bloc === selectedBloc)
+      : [];
+
   return (
-    <>
-      <div className="modal">
-        <div className="container">
-          <a onClick={() => setShowModal(false)}>
-            <X style={{ cursor: "pointer" }} />
-          </a>
+      <>
+        <div className="modal">
+          <div className="container">
+            <a onClick={() => setShowModal(false)}>
+              <X style={{ cursor: "pointer" }} />
+            </a>
 
-          <h2>Ajouter une compétence</h2>
-          <p>Nom de l'évaluation :</p>
-          <SelectCompetenceRH competences={competences} />
-          <p>Nom de l'employé :</p>
-          <SelectEmployeRH salaries={salaries} />
+            <h2>Ajouter une compétence</h2>
+            <p>Nom du bloc :</p>
+            <SelectBloc blocs={blocs} onChange={handleChangeBloc} />
+            <p>Nom de l'évaluation :</p>
+            <SelectCompetenceRH competences={competencesFiltrees} />
+            <p>Nom de l'employé :</p>
+            <SelectEmployeRH salaries={salaries} />
 
-          <button
-            style={{
-              backgroundColor: "#FFF",
-              border: "1px solid blue",
-              borderRadius: "4px",
-              padding: "8px 16px",
-              color: "BLUE",
-            }}
-            onClick={() => setShowModal(true)}
-          >
-            Ajouter
-          </button>
+            <button
+                style={{
+                  backgroundColor: "#FFF",
+                  border: "1px solid blue",
+                  borderRadius: "4px",
+                  padding: "8px 16px",
+                  color: "BLUE",
+                }}
+                onClick={() => setShowModal(true)}
+            >
+              Ajouter
+            </button>
+          </div>
         </div>
-      </div>
-    </>
+      </>
   );
+}
 
+interface SelectBlocProps {
+  blocs: string[];
+  onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+}
+
+function SelectBloc({ blocs, onChange }: SelectBlocProps) {
+  return (
+      <Form.Select className="select-rh" onChange={onChange}>
+        <option>Sélectionner un bloc</option>
+        {blocs.map((bloc, index) => (
+            <option key={index}>{bloc}</option>
+        ))}
+      </Form.Select>
+  );
 }
 
 interface SelectCompetenceRHProps {
@@ -116,23 +149,13 @@ interface SelectCompetenceRHProps {
 }
 
 function SelectCompetenceRH({ competences }: SelectCompetenceRHProps) {
-
-    const [selectedSkill, setSelectedSkill] = useState<comp | null>(null);
-
-    const handleChange= (event: React.ChangeEvent<HTMLSelectElement>) => {
-        const selectedIndex = event.target.selectedIndex;
-        const selectedSkill = competences[selectedIndex - 1]; // -1 because the first option is not a skill
-        setSelectedSkill(selectedSkill);
-        console.log(selectedSkill)
-    }
-
   return (
-    <Form.Select className="select-rh" onChange={handleChange}>
-      <option>Sélectionner votre évaluation</option>
-      {competences.map((comp) => (
-        <option key={comp.id_competence}>{comp.nom_competence}</option>
-      ))}
-    </Form.Select>
+      <Form.Select className="select-rh">
+        <option>Sélectionner une compétence</option>
+        {competences.map((comp) => (
+            <option key={comp.id_competence}>{comp.nom_competence}</option>
+        ))}
+      </Form.Select>
   );
 }
 
@@ -141,24 +164,12 @@ interface SelectEmployeRHProps {
 }
 
 function SelectEmployeRH({ salaries }: SelectEmployeRHProps) {
-  const [selectedEmploye, setSelectedEmploye] = useState<Salarie | null>(null);
-
-  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedIndex = event.target.selectedIndex;
-    const selectedSalarie = salaries[selectedIndex - 1]; // -1 because the first option is not a salarie
-    setSelectedEmploye(selectedSalarie);
-    console.log(selectedSalarie)
-  };
-
   return (
-    <Form.Select className="select-rh" onChange={handleChange}>
-      <option>Sélectionner l'employé</option>
-      {salaries.map((salarie) => (
-        <option
-          key={salarie.idsalarie}
-        >{`${salarie.prenom} ${salarie.nom}`}</option>
-      ))}
-    </Form.Select>
+      <Form.Select className="select-rh">
+        <option>Sélectionner l'employé</option>
+        {salaries.map((salarie) => (
+            <option key={salarie.idsalarie}>{`${salarie.prenom} ${salarie.nom}`}</option>
+        ))}
+      </Form.Select>
   );
 }
-
