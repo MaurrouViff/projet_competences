@@ -13,7 +13,6 @@ import { Link } from "react-router-dom";
 import "../assets/css/login.css";
 
 export function Home() {
-
   async function signInWithEmail() {
     const { data, error } = await supabase.auth.signInWithPassword({
       email: email,
@@ -22,8 +21,9 @@ export function Home() {
     if (error) {
       console.log(error);
     }
+    // go to RH page and refresh
     window.location.href = "/rh";
-    setLoading(false)
+    setLoading(false);
   }
 
   const [loading, setLoading] = useState(false);
@@ -51,7 +51,7 @@ export function Home() {
           </Link>
           <h2>Projet Compétences</h2>
 
-         
+          <form>
             <div>
               <input
                 className="inputField"
@@ -71,11 +71,16 @@ export function Home() {
               />
             </div>
             <div>
-              <Button onClick={signInWithEmail} className="button" variant="primary" disabled={loading}>
+              <Button
+                onClick={signInWithEmail}
+                className="button"
+                variant="primary"
+                disabled={loading}
+              >
                 {loading ? "Loading ..." : "Connexion"}
               </Button>
             </div>
-    
+          </form>
 
           <div className="version">
             <Link to="/about">

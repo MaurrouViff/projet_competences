@@ -13,6 +13,9 @@ export const Layout: React.FC<RootLayoutProps> = ({children}) => {
     // MANAGE LOGOUT SESSION
     const logOut = async () => {
         let { error } = await supabase.auth.signOut()
+        // remove user from local storage to log user out
+        localStorage.removeItem('user');
+        window.location.href = "/"
         if (error) {
             console.log(error)
         }

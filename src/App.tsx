@@ -23,31 +23,42 @@ import supabase from "./lib/supabaseClient.ts";
 import { About } from "./pages/about.tsx";
 
 function App() {
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false);
 
-    const [loggedIn, setLoggedIn] = useState(false);
-    const [authChecked, setAuthChecked] = useState(false);
-
-useEffect(() => {
-  async function checkAuth() {
-    const { data } = await supabase.auth.getSession();
-    setLoggedIn(!!data.session?.user);
-    setAuthChecked(true);
+  function getUser(userID) {
+    supabase
+      .from("salarie")
+      .select("*")
+      .eq("uuid", userID)
+      .then((data) => {
+        localStorage.setItem("user", JSON.stringify(data.data[0]));
+        
+      });
+      
   }
 
-  checkAuth();
-}, []);
+  useEffect(() => {
+    async function checkAuth() {
+      const { data } = await supabase.auth.getUser();
+      setLoggedIn(!!data.user?.id);
+      setAuthChecked(true);
+      const userID = data.user?.id;
+      getUser(userID);
+    }
 
+    checkAuth();
+  }, []);
 
-if (!authChecked) {
+  // returns null until we know if the user is logged in or not
+  if (!authChecked) {
     return null; // or a loading spinner
   }
-
 
   return (
     <>
       {loggedIn ? (
         <Routes>
-          <Route path="/" element={<Home />} />
           <Route path="/rh" element={<Rh />} />
           <Route path="/rh/salarie" element={<Salarie />} />
           <Route path="/rh/skills" element={<Skills />} />
