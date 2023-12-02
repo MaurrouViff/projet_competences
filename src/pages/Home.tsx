@@ -1,7 +1,7 @@
 // import button from bootstrap
 import Button from "react-bootstrap/Button";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // importing supabase
 import supabase from "../lib/supabaseClient";
@@ -22,14 +22,13 @@ export function Home() {
     if (error) {
       console.log(error);
     }
-    console.log(data);
+    window.location.href = "/rh";
     setLoading(false)
   }
 
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  
 
   return (
     <>
