@@ -10,6 +10,8 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { Details_Eval } from "./details_eval.tsx";
 
+import BeatLoader from "react-spinners/BeatLoader";
+
 interface Skills {
   idcompetence: number;
   titre: string;
@@ -114,7 +116,7 @@ export function SkillsCollaborateur() {
     } else {
       return (
         <p className="loading text-center display-5 justify-content-center">
-          Chargement...
+          <BeatLoader color="#000000" />
         </p>
       );
     }

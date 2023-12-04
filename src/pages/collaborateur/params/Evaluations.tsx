@@ -9,6 +9,8 @@ import { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import supabase from "../../../lib/supabaseClient.ts";
 
+import { BeatLoader } from "react-spinners";
+
 import { Details_Eval } from "./details_eval.tsx";
 
 interface Evaluation {
@@ -71,7 +73,7 @@ export function EvaluationsCollaborateur() {
     } else {
       return (
         <p className="loading text-center display-5 justify-content-center">
-          Chargement...
+          <BeatLoader color="#000000" />
         </p>
       );
     }

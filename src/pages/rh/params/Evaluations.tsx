@@ -7,6 +7,8 @@ import { Supprimer } from "./supprimer.tsx";
 import supabase from "../../../lib/supabaseClient.ts";
 import { Details_Eval } from "./details_eval.tsx";
 
+import { BeatLoader } from "react-spinners";
+
 interface Evaluation {
   idevaluation: number;
   remarque: string;
@@ -62,7 +64,7 @@ export function Evaluations() {
     } else {
       return (
         <p className="loading text-center display-5 justify-content-center">
-          Chargement...
+          <BeatLoader color="#000000" />
         </p>
       );
     }
