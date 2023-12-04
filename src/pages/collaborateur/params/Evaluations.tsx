@@ -8,6 +8,7 @@ import { LayoutCollaborateur } from "./layout.tsx";
 import { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import supabase from "../../../lib/supabaseClient.ts";
+
 import { Details_Eval } from "./details_eval.tsx";
 
 interface Evaluation {
@@ -19,8 +20,10 @@ interface Evaluation {
 
 export function EvaluationsCollaborateur() {
     const [showDetails, setShowDetails] = useState(false);
+
     const [evaluations, setEvaluations] = useState<Evaluation[] | null>(null);
-    const [selectedEval, setSelectedEval] = useState<Evaluation | null>(null);
+
+    const [selectedEval, setSelectedEval] = useState<string | null>(null);
 
     useEffect(() => {
         async function readEvaluation() {
@@ -41,14 +44,14 @@ export function EvaluationsCollaborateur() {
         readEvaluation();
     }, []);
 
-    function renderEvaluation(renderDetails: (eval: Evaluation) => React.ReactNode) {
+    function renderEvaluation() {
         if (evaluations && evaluations.length > 0) {
             return evaluations?.map((evaluation) => (
                 <div
                     key={evaluation.idevaluation}
                     onClick={() => {
                         setShowDetails(true);
-                        setSelectedEval(evaluation);
+                        setSelectedEval(evaluation.idevaluation);
                     }}
                     style={{
                         display: "flex",
@@ -57,13 +60,12 @@ export function EvaluationsCollaborateur() {
                         borderBottom: "1px solid #000",
                         padding: "8px 30px",
                         margin: "0",
-                        cursor: "pointer",
+                        cursor: "pointer", // Ajouté pour indiquer que cet élément est cliquable
                     }}
                 >
                     <p style={{ fontWeight: "700", fontSize: "20px", flex: "1" }}>
                         {evaluation.nom}
                     </p>
-                    {renderDetails(evaluation)}
                 </div>
             ));
         } else {
@@ -79,6 +81,7 @@ export function EvaluationsCollaborateur() {
         <div className="skills salarie">
             <Layout>
                 <LayoutCollaborateur />
+
                 <div
                     style={{
                         backgroundColor: "#FFF",
@@ -101,17 +104,11 @@ export function EvaluationsCollaborateur() {
                     >
                         <h2>Evaluations</h2>
                     </div>
-                    <div>
-                        {renderEvaluation((selectedEval) => (
-                            <Details_Eval
-                                setShowModal={setShowDetails}
-                                selectedEval={selectedEval}
-                            />
-                        ))}
-                    </div>
+                    <div>{renderEvaluation()}</div>
                     {showDetails && (
                         <Details_Eval setShowModal={setShowDetails} evalID={selectedEval} />
                     )}
+
                 </div>
             </Layout>
         </div>

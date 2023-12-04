@@ -15,20 +15,20 @@ import "../assets/css/login.css";
 export function Home() {
   async function getRole(id_user) {
     supabase
-      .from("salarie")
-      .select("role")
-      .eq("uuid", id_user)
-      .then((data) => {
-        let target = data.data[0].role;
+        .from("salarie")
+        .select("role")
+        .eq("uuid", id_user)
+        .then((data) => {
+          let target = data.data[0].role;
 
-        if (target === 2) {
-          console.log(target + " RH ");
-          window.location.href = "/rh";
-        } else if (target === 1) {
-          console.log(target + " Collaborateur ");
-          window.location.href = "/collaborateur";
-        }
-      });
+          if (target === 2) {
+            console.log(target + " RH ");
+            window.location.href = "/rh";
+          } else if (target === 1) {
+            console.log(target + " Collaborateur ");
+            window.location.href = "/collaborateur";
+          }
+        });
   }
 
   async function signInWithEmail() {
@@ -49,66 +49,66 @@ export function Home() {
   const [password, setPassword] = useState("");
 
   return (
-    <>
-      <div id="welcome" className="welcome container-fluid py-5">
-        <h2>Projet Compétences</h2>
-        <h1>Bienvenue, name</h1>
-      </div>
-
-      <div className="login split-screen">
-        <div className="left">
-          <section className="copy">
-            <h1>Projet Compétences</h1>
-            <p>Progiciel de gestion des acquis en entreprise</p>
-          </section>
+      <>
+        <div id="welcome" className="welcome container-fluid py-5">
+          <h2>Projet Compétences</h2>
+          <h1>Bienvenue, name</h1>
         </div>
 
-        <div className="right">
-          <h1>Connexion</h1>
-          <h2>Projet Compétences</h2>
+        <div className="login split-screen">
+          <div className="left">
+            <section className="copy">
+              <h1>Projet Compétences</h1>
+              <p>Progiciel de gestion des acquis en entreprise</p>
+            </section>
+          </div>
 
-          <form>
-            <div>
-              <input
-                style={{padding: "10px", borderRadius: 8, outline: "none", border: "none", minWidth: "300px"}}
-                className="inputField"
-                type="email"
-                placeholder="email"
-                required={true}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <div>
-              <input
-                style={{padding: "10px", borderRadius: 8, outline: "none", border: "none", marginTop: "8px", minWidth: "300px"}}
-                className="inputField"
-                type="password"
-                placeholder="password"
-                required={true}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-            <div>
-              <Button
-                style={{width: "100%", marginTop: "8px"}}
-                onClick={signInWithEmail}
-                className="button"
-                variant="primary"
-                disabled={loading}
-              >
-                {loading ? "Loading ..." : "Connexion"}
-              </Button>
-            </div>
-          </form>
+          <div className="right">
+            <h1>Connexion</h1>
+            <h2>Projet Compétences</h2>
 
-          <div className="version">
-            <Link to="/about">
-              <h5>Alpha 0.0.1 - Electron x React </h5>
-              <h5>made by guillaume / delange / aubriet</h5>
-            </Link>
+            <form>
+              <div>
+                <input
+                    style={{padding: "10px", borderRadius: 8, outline: "none", border: "none", minWidth: "300px"}}
+                    className="inputField"
+                    type="email"
+                    placeholder="email"
+                    required={true}
+                    onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+              <div>
+                <input
+                    style={{padding: "10px", borderRadius: 8, outline: "none", border: "none", marginTop: "8px", minWidth: "300px"}}
+                    className="inputField"
+                    type="password"
+                    placeholder="password"
+                    required={true}
+                    onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
+              <div>
+                <Button
+                    style={{width: "100%", marginTop: "8px"}}
+                    onClick={signInWithEmail}
+                    className="button"
+                    variant="primary"
+                    disabled={loading}
+                >
+                  {loading ? "Loading ..." : "Connexion"}
+                </Button>
+              </div>
+            </form>
+
+            <div className="version">
+              <Link to="/about">
+                <h5>Alpha 0.0.1 - Electron x React </h5>
+                <h5>made by guillaume / delange / aubriet</h5>
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
-    </>
+      </>
   );
 }
