@@ -13,6 +13,10 @@ import { Link } from "react-router-dom";
 import "../assets/css/login.css";
 
 export function Home() {
+  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   async function getRole(id_user) {
     supabase
       .from("salarie")
@@ -20,6 +24,7 @@ export function Home() {
       .eq("uuid", id_user)
       .then((data) => {
         let target = data.data[0].role;
+        setLoading(false);
 
         if (target === 2) {
           console.log(target + " RH ");
@@ -34,21 +39,19 @@ export function Home() {
   }
 
   async function signInWithEmail() {
+    setLoading(true);
     const { data, error } = await supabase.auth.signInWithPassword({
       email: email,
       password: password,
     });
     if (error) {
       console.log(error);
+      setLoading(false);
     }
     await getRole(data.user.id);
 
-    setLoading(false);
+    
   }
-
-  const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
 
   return (
     <>
@@ -72,7 +75,13 @@ export function Home() {
           <form>
             <div>
               <input
-                style={{padding: "10px", borderRadius: 8, outline: "none", border: "none", minWidth: "300px"}}
+                style={{
+                  padding: "10px",
+                  borderRadius: 8,
+                  outline: "none",
+                  border: "none",
+                  minWidth: "300px",
+                }}
                 className="inputField"
                 type="email"
                 placeholder="email"
@@ -82,7 +91,14 @@ export function Home() {
             </div>
             <div>
               <input
-                style={{padding: "10px", borderRadius: 8, outline: "none", border: "none", marginTop: "8px", minWidth: "300px"}}
+                style={{
+                  padding: "10px",
+                  borderRadius: 8,
+                  outline: "none",
+                  border: "none",
+                  marginTop: "8px",
+                  minWidth: "300px",
+                }}
                 className="inputField"
                 type="password"
                 placeholder="password"
@@ -92,13 +108,15 @@ export function Home() {
             </div>
             <div>
               <Button
-                style={{width: "100%", marginTop: "8px"}}
+                style={{ width: "100%", marginTop: "8px" }}
                 onClick={signInWithEmail}
                 className="button"
                 variant="primary"
                 disabled={loading}
               >
-                {loading ? "Loading ..." : "Connexion"}
+                {loading ? "Chargement..." : "Se connecter"}
+                  
+                
               </Button>
             </div>
           </form>
