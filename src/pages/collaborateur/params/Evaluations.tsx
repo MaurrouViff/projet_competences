@@ -6,7 +6,6 @@ import "../../../assets/css/collabo.css";
 import { LayoutCollaborateur } from "./layout.tsx";
 
 import { useState, useEffect } from "react";
-import { X } from "lucide-react";
 import supabase from "../../../lib/supabaseClient.ts";
 
 import { BeatLoader } from "react-spinners";

@@ -4,6 +4,8 @@ import "../../../assets/css/salarie.css";
 import { LayoutRH } from "./layout.tsx";
 import { useEffect, useState } from "react";
 
+import {BeatLoader} from "react-spinners";
+
 interface Salarie {
   idsalarie: number;
   nom: string;
@@ -80,7 +82,7 @@ export function Salarie() {
               ))
             ) : (
               <p className="loading text-center display-5 justify-content-center">
-                Chargement...
+                <BeatLoader color="#000000" />
               </p>
             )}
           </div>

@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 
 // import supabase
 import supabase from "../../../lib/supabaseClient.ts";
-import { Evaluations } from "../../rh/params/Evaluations.tsx";
+
 
 import {BeatLoader} from "react-spinners";
 
