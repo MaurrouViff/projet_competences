@@ -9,8 +9,7 @@ import supabase from "../../../lib/supabaseClient.ts";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { Details_Eval } from "./details_eval.tsx";
-
-import BeatLoader from "react-spinners/BeatLoader";
+import { Form } from "react-bootstrap";
 
 interface Skills {
     idcompetence: number;
@@ -22,12 +21,15 @@ interface Skills {
 
 export function SkillsCollaborateur() {
     const [skills, setSkills] = useState<Skills[] | null>(null);
+    const [selectedSkill, setSelectedSkill] = useState<string | null>(null);
     const [showDetails, setShowDetails] = useState(false);
     const [selectedEval, setSelectedEval] = useState<number | null>(null);
+    const [loadingSkills, setLoadingSkills] = useState<boolean>(false);
 
     useEffect(() => {
         async function readSkills() {
             try {
+                setLoadingSkills(true);
                 const { data: competence, error } = await supabase
                     .from("comp")
                     .select("*");
@@ -46,6 +48,8 @@ export function SkillsCollaborateur() {
                     "Erreur lors du chargement des compétences depuis Supabase:",
                     error
                 );
+            } finally {
+                setLoadingSkills(false);
             }
         }
 
@@ -53,19 +57,26 @@ export function SkillsCollaborateur() {
     }, []);
 
     async function exportSkillsToPDF() {
-        console.log("exporting to PDF...");
         const doc = new jsPDF();
-
         doc.setFont("Helvetica", "normal");
 
-        const tableColumn = ["Bloc", "Domaine", "Compétence"];
+        const tableColumn = ["Bloc", "Domaine", "Compétence", "ID"];
         const tableRows: (string | number)[][] = [];
 
-        skills?.forEach((skill) => {
+        let filteredSkills = skills;
+
+        if (selectedSkill) {
+            filteredSkills = skills?.filter(
+                (skill) => skill.nom_competence === selectedSkill
+            ) || [];
+        }
+
+        filteredSkills.forEach((skill) => {
             const skillData = [
                 skill.nom_bloc.normalize(),
                 skill.nom_domaine.normalize(),
                 skill.nom_competence.normalize(),
+                skill.idcompetence,
             ];
             tableRows.push(skillData);
         });
@@ -87,8 +98,16 @@ export function SkillsCollaborateur() {
     }
 
     function renderSkills() {
-        if (skills && skills.length > 0) {
-            return skills?.map((skill, index) => (
+        let filteredSkills = skills;
+
+        if (selectedSkill) {
+            filteredSkills = skills?.filter(
+                (skill) => skill.nom_competence === selectedSkill
+            ) || [];
+        }
+
+        if (filteredSkills && filteredSkills.length > 0) {
+            return filteredSkills.map((skill, index) => (
                 <div
                     onClick={() => {
                         setShowDetails(true);
@@ -102,6 +121,7 @@ export function SkillsCollaborateur() {
                         borderBottom: "1px solid #000",
                         padding: "8px 30px",
                         margin: "0",
+                        cursor: "pointer",
                     }}
                 >
                     <div className="div">
@@ -110,13 +130,14 @@ export function SkillsCollaborateur() {
                         <p style={{ fontWeight: "700", fontSize: "20px" }}>
                             {skill.nom_competence}
                         </p>
+                        <p>ID: {skill.idcompetence}</p>
                     </div>
                 </div>
             ));
         } else {
             return (
                 <p className="loading text-center display-5 justify-content-center">
-                    <BeatLoader color="#000000" />
+                    Aucune compétence correspondante.
                 </p>
             );
         }
@@ -148,7 +169,11 @@ export function SkillsCollaborateur() {
                         }}
                     >
                         <h2>Tirage par compétences</h2>
-                        <SelectCollaboSkills />
+                        <SelectCollaboSkills
+                            skills={skills}
+                            onSelectSkill={setSelectedSkill}
+                            onLoadSkills={() => setLoadingSkills(true)}
+                        />
                         <button
                             className="btn btn-outline-dark"
                             type="button"
@@ -162,23 +187,38 @@ export function SkillsCollaborateur() {
                         <div>{renderSkills()}</div>
                     </div>
                     {showDetails && (
-                        <Details_Eval setShowModal={setShowDetails} evalID={selectedEval} />
+                        <Details_Eval setShowModal={setShowDetails} selectedEval={selectedEval} />
                     )}
                 </div>
             </Layout>
         </div>
     );
 }
-import { Form } from "react-bootstrap";
-function SelectCollaboSkills() {
+
+function SelectCollaboSkills({
+                                 skills,
+                                 onSelectSkill,
+                                 onLoadSkills,
+                             }: {
+    skills: Skills[] | null;
+    onSelectSkill: (skill: string | null) => void;
+    onLoadSkills: () => void;
+}) {
+    const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        onSelectSkill(e.target.value);
+        onLoadSkills();
+    };
+
     return (
         <>
             <br />
-            <Form.Select className="select-collabo">
-                <option>Sélectionner votre compétences</option>
+            <Form.Select className="select-collabo" onChange={handleSelectChange}>
+                <option>Toutes les compétences</option>
+                {skills &&
+                    skills.map((skill, index) => (
+                        <option key={index}>{skill.nom_competence}</option>
+                    ))}
             </Form.Select>
         </>
     );
 }
-
-export default SelectCollaboSkills;
