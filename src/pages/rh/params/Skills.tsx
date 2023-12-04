@@ -8,6 +8,8 @@ import supabase from "../../../lib/supabaseClient.ts";
 
 import { Details_Eval } from "./details_eval.tsx";
 
+import BeatLoader from "react-spinners/BeatLoader";
+
 interface Skills {
   idcompetence: number;
   titre: string;
@@ -59,12 +61,11 @@ export function Skills() {
     } else {
       return (
         <p className="loading text-center display-5 justify-content-center">
-          Chargement...
+          <BeatLoader color="#000000" />
         </p>
       );
     }
   }
-
 
   return (
     <div className="skills salarie">
@@ -97,7 +98,6 @@ export function Skills() {
           <div>{renderSkills()}</div>
 
           {showModal && <Supprimer setShowModal={setShowModal} />}
-          
         </div>
       </Layout>
     </div>

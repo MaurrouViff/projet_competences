@@ -6,6 +6,8 @@ import { useState, useEffect } from "react";
 // import supabase
 import supabase from "../../../lib/supabaseClient.ts";
 
+import BeatLoader from "react-spinners/BeatLoader";
+
 export function Details_Eval({
   setShowModal,
   evalID,
@@ -55,7 +57,7 @@ export function Details_Eval({
               <X style={{ cursor: "pointer" }} />
             </a>
 
-            <h2>Chargement</h2>
+            <BeatLoader color="#000000" />
           </div>
         </div>
       </>
