@@ -1,10 +1,11 @@
 import "../../assets/css/rh.css";
 import { Layout } from "./layout.tsx";
-import { useState } from "react";
+import { useContext } from "react";
+
+import  {UserContext}  from "../../App.tsx";
 
 export function Rh() {
-  const user = JSON.parse(localStorage.getItem("user")!);
-  
+  const user = useContext(UserContext);
 
   return (
     <>
@@ -12,7 +13,7 @@ export function Rh() {
         <div style={{ display: "flex", background: "#fff", width: "100%" }}>
           <div className="rh">
             <h1>Team OASIS</h1>
-            <h2>{user.nom}</h2>
+            <h3>User connecté : {user.prenom + " " + user.nom}</h3>
             <img src="/OASIS-logo.jpg" alt="" />
           </div>
         </div>
@@ -20,3 +21,5 @@ export function Rh() {
     </>
   );
 }
+
+export default Rh;

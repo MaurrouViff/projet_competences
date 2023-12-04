@@ -13,6 +13,24 @@ import { Link } from "react-router-dom";
 import "../assets/css/login.css";
 
 export function Home() {
+  async function getRole(id_user) {
+    supabase
+      .from("salarie")
+      .select("role")
+      .eq("uuid", id_user)
+      .then((data) => {
+        let target = data.data[0].role;
+
+        if (target === 2) {
+          console.log(target + " RH ");
+          window.location.href = "/rh";
+        } else if (target === 1) {
+          console.log(target + " Collaborateur ");
+          window.location.href = "/collaborateur";
+        }
+      });
+  }
+
   async function signInWithEmail() {
     const { data, error } = await supabase.auth.signInWithPassword({
       email: email,
@@ -21,8 +39,8 @@ export function Home() {
     if (error) {
       console.log(error);
     }
-    // go to RH page and refresh
-    window.location.href = "/rh";
+    await getRole(data.user.id);
+
     setLoading(false);
   }
 

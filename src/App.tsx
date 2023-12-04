@@ -1,6 +1,6 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, createContext } from "react";
 
 import { Home } from "./pages/Home.tsx";
 
@@ -22,9 +22,14 @@ import supabase from "./lib/supabaseClient.ts";
 
 import { About } from "./pages/about.tsx";
 
+export const UserContext = createContext(null);
+
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [authChecked, setAuthChecked] = useState(false);
+
+  // Add state for user
+  const [user, setUser] = useState(null);
 
   function getUser(userID) {
     supabase
@@ -32,37 +37,52 @@ function App() {
       .select("*")
       .eq("uuid", userID)
       .then((data) => {
-        localStorage.setItem("user", JSON.stringify(data.data[0]));
-        
+        setUser(data.data[0]);
       });
-      
   }
+
+  // function getRole(id_role) {
+  //   supabase
+  //     .from("role")
+  //     .select("*")
+  //     .eq("id", id_role)
+  //     .then((data) => {
+  //       console.log(data.data[0].id);
+  //     });
+  // }
 
   useEffect(() => {
     async function checkAuth() {
       const { data } = await supabase.auth.getUser();
       setLoggedIn(!!data.user?.id);
-      setAuthChecked(true);
       const userID = data.user?.id;
       getUser(userID);
+      setAuthChecked(true);
     }
 
     checkAuth();
   }, []);
 
-  // returns null until we know if the user is logged in or not
-  if (!authChecked) {
-    return null; // or a loading spinner
-  }
+  function renderRoutes() {
+    if (!authChecked) {
+      return null;
+    }
 
-  return (
-    <>
-      {loggedIn ? (
+    if (user?.role === 2) {
+      return (
         <Routes>
+          <Route path="/" element={<Rh />} />
           <Route path="/rh" element={<Rh />} />
           <Route path="/rh/salarie" element={<Salarie />} />
           <Route path="/rh/skills" element={<Skills />} />
           <Route path="/rh/evaluations" element={<Evaluations />} />
+          <Route path="/about" element={<About />} />
+        </Routes>
+      );
+    } else if (user?.role === 1) {
+      return (
+        <Routes>
+          <Route path="/" element={<Home />} />
           <Route path="/collaborateur" element={<Collaborateur />} />
           <Route
             path="/collaborateur/skills"
@@ -72,15 +92,22 @@ function App() {
             path="/collaborateur/eval"
             element={<EvaluationsCollaborateur />}
           />
-          <Route path="/about" element={<About />} />
         </Routes>
-      ) : (
+      );
+    } else {
+      return (
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/*" element={<Home />} />
+          
         </Routes>
-      )}
-    </>
+      );
+    }
+  }
+
+  return (
+    <UserContext.Provider value={user}>
+      <div className="App">{renderRoutes()}</div>
+    </UserContext.Provider>
   );
 }
 
