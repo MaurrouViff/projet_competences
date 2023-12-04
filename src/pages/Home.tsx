@@ -1,7 +1,7 @@
 // import button from bootstrap
 import Button from "react-bootstrap/Button";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 // importing supabase
 import supabase from "../lib/supabaseClient";
@@ -64,14 +64,13 @@ export function Home() {
         </div>
 
         <div className="right">
-          <Link to="/rh">
-            <h1>Connexion</h1>
-          </Link>
+          <h1>Connexion</h1>
           <h2>Projet Compétences</h2>
 
           <form>
             <div>
               <input
+                style={{padding: "10px", borderRadius: 8, outline: "none", border: "none", minWidth: "300px"}}
                 className="inputField"
                 type="email"
                 placeholder="email"
@@ -81,6 +80,7 @@ export function Home() {
             </div>
             <div>
               <input
+                style={{padding: "10px", borderRadius: 8, outline: "none", border: "none", marginTop: "8px", minWidth: "300px"}}
                 className="inputField"
                 type="password"
                 placeholder="password"
@@ -90,6 +90,7 @@ export function Home() {
             </div>
             <div>
               <Button
+                style={{width: "100%", marginTop: "8px"}}
                 onClick={signInWithEmail}
                 className="button"
                 variant="primary"
