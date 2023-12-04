@@ -25,7 +25,7 @@ import { About } from "./pages/about.tsx";
 export const UserContext = createContext(null);
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(false);
+ 
   const [authChecked, setAuthChecked] = useState(false);
 
   // Add state for user
@@ -54,7 +54,7 @@ function App() {
   useEffect(() => {
     async function checkAuth() {
       const { data } = await supabase.auth.getUser();
-      setLoggedIn(!!data.user?.id);
+      
       const userID = data.user?.id;
       getUser(userID);
       setAuthChecked(true);
@@ -69,6 +69,7 @@ function App() {
     }
 
     if (user?.role === 2) {
+      // RH
       return (
         <Routes>
           <Route path="/" element={<Rh />} />
@@ -76,10 +77,11 @@ function App() {
           <Route path="/rh/salarie" element={<Salarie />} />
           <Route path="/rh/skills" element={<Skills />} />
           <Route path="/rh/evaluations" element={<Evaluations />} />
-          <Route path="/about" element={<About />} />
+          <Route path="/*" element={<Rh />} />
         </Routes>
       );
     } else if (user?.role === 1) {
+      // Collaborateur
       return (
         <Routes>
           <Route path="/" element={<Home />} />
@@ -92,13 +94,14 @@ function App() {
             path="/collaborateur/eval"
             element={<EvaluationsCollaborateur />}
           />
+          <Route path="/*" element={<Collaborateur />} />
         </Routes>
       );
     } else {
       return (
         <Routes>
           <Route path="/" element={<Home />} />
-          
+
         </Routes>
       );
     }
