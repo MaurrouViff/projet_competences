@@ -26,93 +26,93 @@ import { About } from "./pages/about.tsx";
 export const UserContext = createContext(null);
 
 function App() {
- 
-  const [authChecked, setAuthChecked] = useState(false);
 
-  // Add state for user
-  const [user, setUser] = useState(null);
+    const [authChecked, setAuthChecked] = useState(false);
 
-  function getUser(userID) {
-    supabase
-      .from("salarie")
-      .select("*")
-      .eq("uuid", userID)
-      .then((data) => {
-        setUser(data.data[0]);
-      });
-  }
+    // Add state for user
+    const [user, setUser] = useState(null);
 
-  // function getRole(id_role) {
-  //   supabase
-  //     .from("role")
-  //     .select("*")
-  //     .eq("id", id_role)
-  //     .then((data) => {
-  //       console.log(data.data[0].id);
-  //     });
-  // }
-
-  useEffect(() => {
-    async function checkAuth() {
-      const { data } = await supabase.auth.getUser();
-      
-      const userID = data.user?.id;
-      getUser(userID);
-      setAuthChecked(true);
+    function getUser(userID) {
+        supabase
+            .from("salarie")
+            .select("*")
+            .eq("uuid", userID)
+            .then((data) => {
+                setUser(data.data[0]);
+            });
     }
 
-    checkAuth();
-  }, []);
+    // function getRole(id_role) {
+    //   supabase
+    //     .from("role")
+    //     .select("*")
+    //     .eq("id", id_role)
+    //     .then((data) => {
+    //       console.log(data.data[0].id);
+    //     });
+    // }
 
-  function renderRoutes() {
-    if (!authChecked) {
-      return null;
+    useEffect(() => {
+        async function checkAuth() {
+            const { data } = await supabase.auth.getUser();
+
+            const userID = data.user?.id;
+            getUser(userID);
+            setAuthChecked(true);
+        }
+
+        checkAuth();
+    }, []);
+
+    function renderRoutes() {
+        if (!authChecked) {
+            return null;
+        }
+
+        if (user?.role === 2) {
+            // RH
+            return (
+                <Routes>
+                    <Route path="/" element={<Rh />} />
+                    <Route path="/rh" element={<Rh />} />
+                    <Route path="/rh/salarie" element={<Salarie />} />
+                    <Route path="/rh/skills" element={<Skills />} />
+                    <Route path="/rh/evaluations" element={<Evaluations />} />
+                    <Route path="/*" element={<Rh />} />
+                </Routes>
+            );
+        } else if (user?.role === 1) {
+            // Collaborateur
+            return (
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/collaborateur" element={<Collaborateur />} />
+                    <Route
+                        path="/collaborateur/skills"
+                        element={<SkillsCollaborateur />}
+                    />
+                    <Route
+                        path="/collaborateur/eval"
+                        element={<EvaluationsCollaborateur />}
+                    />
+                    <Route path="/*" element={<Collaborateur />} />
+                </Routes>
+            );
+        } else {
+            return (
+                <Routes>
+                    <Route path="/" element={<Home />} />
+
+                </Routes>
+            );
+        }
     }
 
-    if (user?.role === 2) {
-      // RH
-      return (
-        <Routes>
-          <Route path="/" element={<Rh />} />
-          <Route path="/rh" element={<Rh />} />
-          <Route path="/rh/salarie" element={<Salarie />} />
-          <Route path="/rh/skills" element={<Skills />} />
-          <Route path="/rh/evaluations" element={<Evaluations />} />
-          <Route path="/*" element={<Rh />} />
-        </Routes>
-      );
-    } else if (user?.role === 1) {
-      // Collaborateur
-      return (
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/collaborateur" element={<Collaborateur />} />
-          <Route
-            path="/collaborateur/skills"
-            element={<SkillsCollaborateur />}
-          />
-          <Route
-            path="/collaborateur/eval"
-            element={<EvaluationsCollaborateur />}
-          />
-          <Route path="/*" element={<Collaborateur />} />
-        </Routes>
-      );
-    } else {
-      return (
-        <Routes>
-          <Route path="/" element={<Home />} />
-
-        </Routes>
-      );
-    }
-  }
-
-  return (
-    <UserContext.Provider value={user}>
-      <div className="App">{renderRoutes()}</div>
-    </UserContext.Provider>
-  );
+    return (
+        <UserContext.Provider value={user}>
+            <div className="App">{renderRoutes()}</div>
+        </UserContext.Provider>
+    );
 }
 
 export default App;
