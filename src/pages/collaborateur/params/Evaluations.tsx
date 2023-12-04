@@ -5,13 +5,15 @@ import "../../../assets/css/salarie.css";
 import "../../../assets/css/collabo.css";
 import { LayoutCollaborateur } from "./layout.tsx";
 
-import { useState, useEffect } from "react";
+import {useState, useEffect, useContext} from "react";
 
 import supabase from "../../../lib/supabaseClient.ts";
 
 import { BeatLoader } from "react-spinners";
 
 import { Details_Eval } from "./details_eval.tsx";
+
+import {UserContext} from "../../../App.tsx";
 
 interface Evaluation {
     idevaluation: number;
@@ -27,6 +29,8 @@ export function EvaluationsCollaborateur() {
 
     const [selectedEval, setSelectedEval] = useState<string | null>(null);
 
+    const user = useContext(UserContext)
+
     useEffect(() => {
         async function readEvaluation() {
             try {
@@ -38,7 +42,13 @@ export function EvaluationsCollaborateur() {
                     console.error(error);
                     return;
                 }
-                setEvaluations(evaluation);
+
+                const filteredEvaluations = evaluation?.filter(evals => evals.idsalarie === user.idsalarie)
+
+                if (filteredEvaluations) {
+                    setEvaluations(filteredEvaluations);
+                }
+
             } catch (error) {
                 console.error(error);
             }
@@ -74,6 +84,7 @@ export function EvaluationsCollaborateur() {
             return (
                 <p className="loading text-center display-5 justify-content-center">
                     <BeatLoader color="#000000" />
+                    Pas d'évaluation !
                 </p>
             );
         }
