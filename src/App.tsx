@@ -21,8 +21,6 @@ import { EvaluationsCollaborateur } from "./pages/collaborateur/params/Evaluatio
 
 import supabase from "./lib/supabaseClient.ts";
 
-import { About } from "./pages/about.tsx";
-
 export const UserContext = createContext(null);
 
 function App() {
