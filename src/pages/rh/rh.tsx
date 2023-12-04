@@ -21,5 +21,3 @@ export function Rh() {
     </>
   );
 }
-
-export default Rh;
