@@ -26,6 +26,8 @@ export function Home() {
           window.location.href = "/rh";
         } else if (target === 1) {
           console.log(target + " Collaborateur ");
+          // set role in session storage
+          sessionStorage.setItem("role", target);
           window.location.href = "/collaborateur";
         }
       });
