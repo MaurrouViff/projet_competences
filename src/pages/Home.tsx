@@ -1,7 +1,7 @@
 // import button from bootstrap
 import Button from "react-bootstrap/Button";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // importing supabase
 import supabase from "../lib/supabaseClient";
@@ -13,6 +13,23 @@ import { Link } from "react-router-dom";
 import "../assets/css/login.css";
 
 export function Home() {
+  async function getRole(id_user) {
+    supabase
+      .from("salarie")
+      .select("role")
+      .eq("uuid", id_user)
+      .then((data) => {
+        let target = data.data[0].role;
+
+        if (target === 2) {
+          console.log(target + " RH ");
+          window.location.href = "/rh";
+        } else if (target === 1) {
+          console.log(target + " Collaborateur ");
+          window.location.href = "/collaborateur";
+        }
+      });
+  }
 
   async function signInWithEmail() {
     const { data, error } = await supabase.auth.signInWithPassword({
@@ -22,14 +39,14 @@ export function Home() {
     if (error) {
       console.log(error);
     }
-    console.log(data);
-    setLoading(false)
+    await getRole(data.user.id);
+
+    setLoading(false);
   }
 
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  
 
   return (
     <>
@@ -52,7 +69,7 @@ export function Home() {
           </Link>
           <h2>Projet Compétences</h2>
 
-         
+          <form>
             <div>
               <input
                 className="inputField"
@@ -72,11 +89,16 @@ export function Home() {
               />
             </div>
             <div>
-              <Button onClick={signInWithEmail} className="button" variant="primary" disabled={loading}>
+              <Button
+                onClick={signInWithEmail}
+                className="button"
+                variant="primary"
+                disabled={loading}
+              >
                 {loading ? "Loading ..." : "Connexion"}
               </Button>
             </div>
-    
+          </form>
 
           <div className="version">
             <Link to="/about">
