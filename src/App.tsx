@@ -34,7 +34,7 @@ function App() {
         supabase
             .from("salarie")
             .select("*")
-            .eq("uuid", userID)
+            .eq("id", userID)
             .then((data) => {
                 setUser(data.data[0]);
             });
