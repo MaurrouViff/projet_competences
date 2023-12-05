@@ -1,5 +1,5 @@
 import "./App.css";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState, createContext } from "react";
 
 
@@ -76,25 +76,25 @@ function App() {
                     <Route path="/rh/salarie" element={<Salarie />} />
                     <Route path="/rh/skills" element={<Skills />} />
                     <Route path="/rh/evaluations" element={<Evaluations />} />
-                    <Route path="/*" element={<Rh />} />
+                    <Route path="/*" element={<Navigate to='/rh' />} />
                 </Routes>
             );
         } else if (user?.role === 1) {
             // Collaborateur
             return (
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/collaborateur" element={<Collaborateur />} />
-                    <Route
-                        path="/collaborateur/skills"
-                        element={<SkillsCollaborateur />}
-                    />
-                    <Route
-                        path="/collaborateur/eval"
-                        element={<EvaluationsCollaborateur />}
-                    />
-                    <Route path="/*" element={<Collaborateur />} />
-                </Routes>
+              <Routes>
+                <Route path="/" element={<Collaborateur />} />
+                <Route path="/collaborateur" element={<Collaborateur />} />
+                <Route
+                  path="/collaborateur/skills"
+                  element={<SkillsCollaborateur />}
+                />
+                <Route
+                  path="/collaborateur/eval"
+                  element={<EvaluationsCollaborateur />}
+                />
+                <Route path="/*" element={<Navigate to="/collaborateur" />} />
+              </Routes>
             );
         } else {
             return (
