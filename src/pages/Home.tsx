@@ -21,7 +21,7 @@ export function Home() {
         supabase
             .from("salarie")
             .select("role")
-            .eq("uuid", id_user)
+            .eq("id", id_user)
             .then((data) => {
                 let target = data.data[0].role;
                 setLoading(false);
