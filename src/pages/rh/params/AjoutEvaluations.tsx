@@ -14,7 +14,7 @@ interface Evaluations {
   idevaluation: number;
   nom: string;
   remarque: string;
-  idsalarie: number;
+  idsalarie: number; // Clé étrangère vers la table "salarie"
 }
 
 interface AjoutEvaluationProps {
@@ -41,7 +41,7 @@ export function AjoutEvaluations({ setShowModalEval }: AjoutEvaluationProps) {
     if (selectedEvaluation && selectedSalarie) {
       try {
         const { data: affectationData, error: affectationError } = await supabase
-            .from("affectation_eval")
+            .from("evaluation")
             .upsert(
                 [
                   {
@@ -49,7 +49,7 @@ export function AjoutEvaluations({ setShowModalEval }: AjoutEvaluationProps) {
                     idsalarie: selectedSalarie,
                   },
                 ],
-                { onConflict: ["idevaluation", "idsalarie"] }
+                { onConflict: ["idevaluation"] }
             );
 
         if (affectationError) {
@@ -74,7 +74,7 @@ export function AjoutEvaluations({ setShowModalEval }: AjoutEvaluationProps) {
       try {
         const { data, error } = await supabase
             .from("evaluation")
-            .select("idevaluation, nom, remarque");
+            .select("idevaluation, nom, remarque, idsalarie");
 
         if (error) {
           console.error(
@@ -116,9 +116,10 @@ export function AjoutEvaluations({ setShowModalEval }: AjoutEvaluationProps) {
       }
     }
 
+    // Appeler les fonctions pour charger les évaluations et les employés lors du montage du composant
     chargerEvaluations();
     chargerSalaries();
-  }, []);
+  }, []); // Le tableau vide assure que l'effet ne se déclenche qu'une seule fois au montage
 
   return (
       <>
@@ -130,28 +131,10 @@ export function AjoutEvaluations({ setShowModalEval }: AjoutEvaluationProps) {
 
             <h2>Ajouter une évaluation</h2>
             <p>Nom de l'évaluation :</p>
-            <SelectEvaluationsRH
-                evaluations={evaluations}
-                onChange={handleEvaluationChange}
-            />
+            <SelectEvaluationsRH evaluations={evaluations} onChange={handleEvaluationChange} />
             <p>Nom de l'employé :</p>
             <SelectEmployeRH salaries={salaries} onChange={handleSalarieChange} />
             <div>
-              {operationSuccess && (
-                  <p style={{ color: "green" }}>Opération réussie</p>
-              )}
-              <button
-                  style={{
-                    backgroundColor: "#FFF",
-                    border: "1px solid #1cff00",
-                    borderRadius: "4px",
-                    padding: "8px 16px",
-                    color: "#1cff00",
-                  }}
-                  onClick={handleValiderClick}
-              >
-                Valider
-              </button>
               <button
                   style={{
                     backgroundColor: "#FFF",
@@ -164,7 +147,20 @@ export function AjoutEvaluations({ setShowModalEval }: AjoutEvaluationProps) {
               >
                 Annuler
               </button>
+              <button
+                  style={{
+                    backgroundColor: "#FFF",
+                    border: "1px solid #1cff00",
+                    borderRadius: "4px",
+                    padding: "8px 16px",
+                    color: "#1cff00",
+                  }}
+                  onClick={handleValiderClick}
+              >
+                Valider
+              </button>
             </div>
+            {operationSuccess && <p>Opération réussie</p>}
           </div>
         </div>
       </>
@@ -194,10 +190,7 @@ interface SelectEvaluationsRHProps {
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
-function SelectEvaluationsRH({
-                               evaluations,
-                               onChange,
-                             }: SelectEvaluationsRHProps) {
+function SelectEvaluationsRH({ evaluations, onChange }: SelectEvaluationsRHProps) {
   return (
       <Form.Select className="select-rh" onChange={onChange}>
         <option>Sélectionner l'évaluation</option>

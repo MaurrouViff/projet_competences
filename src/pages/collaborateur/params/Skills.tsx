@@ -130,7 +130,7 @@ export function SkillsCollaborateur() {
                         <p style={{ fontWeight: "700", fontSize: "20px" }}>
                             {skill.nom_competence}
                         </p>
-                        <p>ID: {skill.idcompetence}</p>
+
                     </div>
                 </div>
             ));
