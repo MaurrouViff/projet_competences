@@ -86,3 +86,21 @@ h5 {
   font-size: 1rem;
   font-weight: 200;
 }
+
+@media only screen and (max-width: 900px) {
+  .login {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .login div {
+    width: 100%;
+  }
+
+  .login .left {
+    display: none;
+  }
+}
