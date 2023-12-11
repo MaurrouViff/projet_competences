@@ -1,18 +1,15 @@
 // SkillsCollaborateur.tsx
-import { Layout } from "../layout.tsx";
-import "../../../assets/css/menu.css";
-import "../../../assets/css/salarie.css";
-import "../../../assets/css/collabo.css";
-import { LayoutCollaborateur } from "./layout.tsx";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import supabase from "../../../lib/supabaseClient.ts";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import { Layout } from "../layout.tsx";
+import { LayoutCollaborateur } from "./layout.tsx";
 import { Details_Eval } from "./details_eval.tsx";
 import { Form } from "react-bootstrap";
 
 interface Skills {
-    idcompetence: number;
+    id_competence: number;
     titre: string;
     nom_domaine: string;
     nom_competence: string;
@@ -21,7 +18,7 @@ interface Skills {
 
 export function SkillsCollaborateur() {
     const [skills, setSkills] = useState<Skills[] | null>(null);
-    const [selectedSkill, setSelectedSkill] = useState<string | null>(null);
+    const [selectedSkillId, setSelectedSkillId] = useState<number | null>(null);
     const [showDetails, setShowDetails] = useState(false);
     const [selectedEval, setSelectedEval] = useState<number | null>(null);
     const [loadingSkills, setLoadingSkills] = useState<boolean>(false);
@@ -65,9 +62,9 @@ export function SkillsCollaborateur() {
 
         let filteredSkills = skills;
 
-        if (selectedSkill) {
+        if (selectedSkillId) {
             filteredSkills = skills?.filter(
-                (skill) => skill.nom_competence === selectedSkill
+                (skill) => skill.id_competence === selectedSkillId
             ) || [];
         }
 
@@ -76,7 +73,7 @@ export function SkillsCollaborateur() {
                 skill.nom_bloc.normalize(),
                 skill.nom_domaine.normalize(),
                 skill.nom_competence.normalize(),
-                skill.idcompetence,
+                skill.id_competence,
             ];
             tableRows.push(skillData);
         });
@@ -100,9 +97,9 @@ export function SkillsCollaborateur() {
     function renderSkills() {
         let filteredSkills = skills;
 
-        if (selectedSkill) {
+        if (selectedSkillId) {
             filteredSkills = skills?.filter(
-                (skill) => skill.nom_competence === selectedSkill
+                (skill) => skill.id_competence === selectedSkillId
             ) || [];
         }
 
@@ -111,7 +108,7 @@ export function SkillsCollaborateur() {
                 <div
                     onClick={() => {
                         setShowDetails(true);
-                        setSelectedEval(skill.idcompetence);
+                        setSelectedEval(skill.id_competence);
                     }}
                     key={index}
                     style={{
@@ -130,7 +127,6 @@ export function SkillsCollaborateur() {
                         <p style={{ fontWeight: "700", fontSize: "20px" }}>
                             {skill.nom_competence}
                         </p>
-
                     </div>
                 </div>
             ));
@@ -171,7 +167,7 @@ export function SkillsCollaborateur() {
                         <h2>Tirage par compétences</h2>
                         <SelectCollaboSkills
                             skills={skills}
-                            onSelectSkill={setSelectedSkill}
+                            onSelectSkill={(skillId) => setSelectedSkillId(Number(skillId))}
                             onLoadSkills={() => setLoadingSkills(true)}
                         />
                         <button
@@ -201,7 +197,7 @@ function SelectCollaboSkills({
                                  onLoadSkills,
                              }: {
     skills: Skills[] | null;
-    onSelectSkill: (skill: string | null) => void;
+    onSelectSkill: (skillId: string | null) => void;
     onLoadSkills: () => void;
 }) {
     const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -213,10 +209,12 @@ function SelectCollaboSkills({
         <>
             <br />
             <Form.Select className="select-collabo" onChange={handleSelectChange}>
-                <option>Toutes les compétences</option>
+                <option value="">Toutes les compétences</option>
                 {skills &&
                     skills.map((skill, index) => (
-                        <option key={index}>{skill.nom_competence}</option>
+                        <option key={index} value={String(skill.id_competence)}>
+                            {skill.nom_competence}
+                        </option>
                     ))}
             </Form.Select>
         </>
