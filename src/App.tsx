@@ -109,7 +109,7 @@ function App() {
       return <Route path="/" element={<Home />} />;
     }
   }
-  if (!user) {
+  if (!user || !routes) {
     return (
       <>
         <div
