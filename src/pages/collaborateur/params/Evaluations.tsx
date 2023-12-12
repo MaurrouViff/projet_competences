@@ -30,8 +30,22 @@ export function EvaluationsCollaborateur() {
   const [selectedEval, setSelectedEval] = useState<string | null>(null);
 
   const [loading, setLoading] = useState(false);
+  const [isLoadingUser, setIsLoadingUser] = useState(true);
 
-  const user = useContext(UserContext);
+  useEffect(() => {
+    async function loadUser() {
+      // Start loading the user data
+      setIsLoadingUser(true);
+
+      // Load the user data here
+      // ...
+
+      // Finished loading the user data
+      setIsLoadingUser(false);
+    }
+
+    loadUser();
+  }, []);
 
   useEffect(() => {
     async function readEvaluation() {
@@ -94,39 +108,46 @@ export function EvaluationsCollaborateur() {
     }
   }
 
-  return (
-    <div className="skills salarie">
-      <Layout>
-        <LayoutCollaborateur />
+  if (isLoadingUser) {
+    return <div>Loading...</div>;
+  }
+    return (
+      <div className="skills salarie">
+        <Layout>
+          <LayoutCollaborateur />
 
-        <div
-          style={{
-            backgroundColor: "#FFF",
-            width: "100%",
-            overflowY: "auto",
-            height: "100vh",
-          }}
-        >
           <div
             style={{
-              height: "100px",
-              width: "100%",
               backgroundColor: "#FFF",
-              display: "flex",
-              alignItems: "center",
-              paddingLeft: "30px",
-              fontWeight: "bold",
-              borderBottom: "1px solid #000",
+              width: "100%",
+              overflowY: "auto",
+              height: "100vh",
             }}
           >
-            <h2>Evaluations</h2>
+            <div
+              style={{
+                height: "100px",
+                width: "100%",
+                backgroundColor: "#FFF",
+                display: "flex",
+                alignItems: "center",
+                paddingLeft: "30px",
+                fontWeight: "bold",
+                borderBottom: "1px solid #000",
+              }}
+            >
+              <h2>Evaluations</h2>
+            </div>
+            <div>{renderEvaluation()}</div>
+            {showDetails && (
+              <Details_Eval
+                setShowModal={setShowDetails}
+                evalID={selectedEval}
+              />
+            )}
           </div>
-          <div>{renderEvaluation()}</div>
-          {showDetails && (
-            <Details_Eval setShowModal={setShowDetails} evalID={selectedEval} />
-          )}
-        </div>
-      </Layout>
-    </div>
-  );
-}
+        </Layout>
+      </div>
+    );
+  }
+

@@ -31,7 +31,7 @@ function App() {
   const [routes, setRoutes] = useState([]);
 
   // Add state for user
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(false);
 
   const role = sessionStorage.getItem("role");
 
@@ -109,9 +109,10 @@ function App() {
       return <Route path="/" element={<Home />} />;
     }
   }
-  if (!user || !routes) {
-    return (
-      <>
+
+  if (!routes) {
+    if (!user) {
+      return (
         <div
           style={{
             display: "flex",
@@ -119,16 +120,14 @@ function App() {
             alignItems: "center",
             height: "100vh",
             backgroundColor: "white",
-                    overflowY: "hidden",
-            
           }}
         >
-          <img src="/OASIS-logo.jpg" width={"10%"} alt="" />
+          <img src="/OASIS-logo.jpg" alt="" />
         </div>
-  
-      </>
-    );
+      );
+    }
   }
+
   return (
     <UserContext.Provider value={user}>
       <Routes>{renderRoutes()}</Routes>
