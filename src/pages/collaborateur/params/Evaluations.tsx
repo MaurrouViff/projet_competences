@@ -69,7 +69,6 @@ export function EvaluationsCollaborateur() {
     }
 
     if (evaluations && evaluations.length > 0 && user) {
-      console.log("eval");
       return evaluations?.map((evaluation) => (
         <div
           key={evaluation.idevaluation}
