@@ -5,7 +5,7 @@ import "../../../assets/css/salarie.css";
 import "../../../assets/css/collabo.css";
 import { LayoutCollaborateur } from "./layout.tsx";
 
-import {useState, useEffect, useContext} from "react";
+import { useState, useEffect, useContext } from "react";
 
 import supabase from "../../../lib/supabaseClient.ts";
 
@@ -13,117 +13,121 @@ import { BeatLoader } from "react-spinners";
 
 import { Details_Eval } from "./details_eval.tsx";
 
-import {UserContext} from "../../../App.tsx";
+import { UserContext } from "../../../App.tsx";
 
 interface Evaluation {
-    idevaluation: number;
-    remarque: string;
-    nom: string;
-    idsalarie: number;
+  idevaluation: number;
+  remarque: string;
+  nom: string;
+  idsalarie: number;
 }
 
 export function EvaluationsCollaborateur() {
-    const [showDetails, setShowDetails] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
 
-    const [evaluations, setEvaluations] = useState<Evaluation[] | null>(null);
+  const [evaluations, setEvaluations] = useState<Evaluation[] | null>(null);
 
-    const [selectedEval, setSelectedEval] = useState<string | null>(null);
+  const [selectedEval, setSelectedEval] = useState<string | null>(null);
 
-    const user = useContext(UserContext)
+  const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        async function readEvaluation() {
-            try {
-                const { data: evaluation, error } = await supabase
-                    .from("evaluation")
-                    .select("*");
+  const user = useContext(UserContext);
 
-                if (error) {
-                    console.error(error);
-                    return;
-                }
+  useEffect(() => {
+    async function readEvaluation() {
+      try {
+        const { data: evaluation, error } = await supabase
+          .from("evaluation")
+          .select("*");
 
-                const filteredEvaluations = evaluation?.filter(evals => evals.idsalarie === user.idsalarie)
-
-                if (filteredEvaluations) {
-                    setEvaluations(filteredEvaluations);
-                }
-
-            } catch (error) {
-                console.error(error);
-            }
+        if (error) {
+          console.error(error);
+          return;
         }
-        readEvaluation();
-    }, []);
 
-    function renderEvaluation() {
-        if (evaluations && evaluations.length > 0) {
-            return evaluations?.map((evaluation) => (
-                <div
-                    key={evaluation.idevaluation}
-                    onClick={() => {
-                        setShowDetails(true);
-                        setSelectedEval(evaluation.idevaluation);
-                    }}
-                    style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        gap: "8px",
-                        borderBottom: "1px solid #000",
-                        padding: "8px 30px",
-                        margin: "0",
-                        cursor: "pointer", // Ajouté pour indiquer que cet élément est cliquable
-                    }}
-                >
-                    <p style={{ fontWeight: "700", fontSize: "20px", flex: "1" }}>
-                        {evaluation.nom}
-                    </p>
-                </div>
-            ));
-        } else {
-            return (
-                <p className="loading text-center display-5 justify-content-center">
-                    <BeatLoader color="#000000" />
-                    Pas d'évaluation !
-                </p>
-            );
+        const filteredEvaluations = evaluation?.filter(
+          (evals) => evals.idsalarie === user.idsalarie
+        );
+
+        if (filteredEvaluations) {
+          setEvaluations(filteredEvaluations);
         }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    readEvaluation();
+  }, []);
+
+  function renderEvaluation() {
+    if (loading) {
+      return (
+        <div className="loading text-center pt-5">
+          <BeatLoader color="#000" />
+        </div>
+      );
     }
 
-    return (
-        <div className="skills salarie">
-            <Layout>
-                <LayoutCollaborateur />
-
-                <div
-                    style={{
-                        backgroundColor: "#FFF",
-                        width: "100%",
-                        overflowY: "auto",
-                        height: "100vh",
-                    }}
-                >
-                    <div
-                        style={{
-                            height: "100px",
-                            width: "100%",
-                            backgroundColor: "#FFF",
-                            display: "flex",
-                            alignItems: "center",
-                            paddingLeft: "30px",
-                            fontWeight: "bold",
-                            borderBottom: "1px solid #000",
-                        }}
-                    >
-                        <h2>Evaluations</h2>
-                    </div>
-                    <div>{renderEvaluation()}</div>
-                    {showDetails && (
-                        <Details_Eval setShowModal={setShowDetails} evalID={selectedEval} />
-                    )}
-
-                </div>
-            </Layout>
+    if (evaluations && evaluations.length > 0 && user) {
+      console.log("eval");
+      return evaluations?.map((evaluation) => (
+        <div
+          key={evaluation.idevaluation}
+          onClick={() => {
+            setShowDetails(true);
+            setSelectedEval(evaluation.idevaluation);
+          }}
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            gap: "8px",
+            borderBottom: "1px solid #000",
+            padding: "8px 30px",
+            margin: "0",
+            cursor: "pointer", // Ajouté pour indiquer que cet élément est cliquable
+          }}
+        >
+          <p style={{ fontWeight: "700", fontSize: "20px", flex: "1" }}>
+            {evaluation.nom}
+          </p>
         </div>
-    );
+      ));
+    }
+  }
+
+  return (
+    <div className="skills salarie">
+      <Layout>
+        <LayoutCollaborateur />
+
+        <div
+          style={{
+            backgroundColor: "#FFF",
+            width: "100%",
+            overflowY: "auto",
+            height: "100vh",
+          }}
+        >
+          <div
+            style={{
+              height: "100px",
+              width: "100%",
+              backgroundColor: "#FFF",
+              display: "flex",
+              alignItems: "center",
+              paddingLeft: "30px",
+              fontWeight: "bold",
+              borderBottom: "1px solid #000",
+            }}
+          >
+            <h2>Evaluations</h2>
+          </div>
+          <div>{renderEvaluation()}</div>
+          {showDetails && (
+            <Details_Eval setShowModal={setShowDetails} evalID={selectedEval} />
+          )}
+        </div>
+      </Layout>
+    </div>
+  );
 }

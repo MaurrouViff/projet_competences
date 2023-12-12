@@ -1,7 +1,7 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import { useEffect, useState, createContext } from "react";
-
+import React from "react";
 
 import { Home } from "./pages/Home.tsx";
 
@@ -21,96 +21,119 @@ import { EvaluationsCollaborateur } from "./pages/collaborateur/params/Evaluatio
 
 import supabase from "./lib/supabaseClient.ts";
 
+// import loading
+import { BeatLoader } from "react-spinners";
+
 export const UserContext = createContext(null);
 
 function App() {
+  const [authChecked, setAuthChecked] = useState(false);
+  const [routes, setRoutes] = useState([]);
 
-    const [authChecked, setAuthChecked] = useState(false);
+  // Add state for user
+  const [user, setUser] = useState(null);
 
-    // Add state for user
-    const [user, setUser] = useState(null);
+  const role = sessionStorage.getItem("role");
 
-    function getUser(userID) {
-        supabase
-            .from("salarie")
-            .select("*")
-            .eq("id", userID)
-            .then((data) => {
-                setUser(data.data[0]);
-            });
+  function getUser(userID) {
+    supabase
+      .from("salarie")
+      .select("*")
+      .eq("id", userID)
+      .then((data) => {
+        setUser(data.data[0]);
+      });
+  }
+
+  // function getRole(id_role) {
+  //   supabase
+  //     .from("role")
+  //     .select("*")
+  //     .eq("id", id_role)
+  //     .then((data) => {
+  //       console.log(data.data[0].id);
+  //     });
+  // }
+
+  useEffect(() => {
+    async function checkAuth() {
+      const { data } = await supabase.auth.getUser();
+
+      const userID = data.user?.id;
+      getUser(userID);
+      setAuthChecked(true);
     }
 
-    // function getRole(id_role) {
-    //   supabase
-    //     .from("role")
-    //     .select("*")
-    //     .eq("id", id_role)
-    //     .then((data) => {
-    //       console.log(data.data[0].id);
-    //     });
-    // }
-
-    useEffect(() => {
-        async function checkAuth() {
-            const { data } = await supabase.auth.getUser();
-
-            const userID = data.user?.id;
-            getUser(userID);
-            setAuthChecked(true);
-        }
-
-        checkAuth();
-    }, []);
-
-    function renderRoutes() {
-        if (!authChecked) {
-            return null;
-        }
-
-        if (user?.role === 2) {
-            // RH
-            return (
-                <Routes>
-                    <Route path="/" element={<Rh />} />
-                    <Route path="/rh" element={<Rh />} />
-                    <Route path="/rh/salarie" element={<Salarie />} />
-                    <Route path="/rh/skills" element={<Skills />} />
-                    <Route path="/rh/evaluations" element={<Evaluations />} />
-                    <Route path="/*" element={<Rh />} />
-                </Routes>
-            );
-        } else if (user?.role === 1) {
-            // Collaborateur
-            return (
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/collaborateur" element={<Collaborateur />} />
-                    <Route
-                        path="/collaborateur/skills"
-                        element={<SkillsCollaborateur />}
-                    />
-                    <Route
-                        path="/collaborateur/eval"
-                        element={<EvaluationsCollaborateur />}
-                    />
-                    <Route path="/*" element={<Collaborateur />} />
-                </Routes>
-            );
-        } else {
-            return (
-                <Routes>
-                    <Route path="/" element={<Home />} />
-
-                </Routes>
-            );
-        }
+    async function getRoutes(id_role) {
+      supabase
+        .from("routes")
+        .select("*")
+        .eq("id_role", id_role)
+        .then((data) => {
+          setRoutes(data.data);
+        });
     }
 
+    getRoutes(role);
+
+    checkAuth();
+  }, []);
+
+  const componentMap = {
+    Home,
+    Rh,
+    Salarie,
+    Skills,
+    Evaluations,
+    Collaborateur,
+    SkillsCollaborateur,
+    EvaluationsCollaborateur,
+  };
+
+  function renderRoutes() {
+    if (routes && routes.length > 0) {
+      return routes.map((route) => {
+        const Component = componentMap[route.element];
+
+        if (!Component) {
+          throw new Error(
+            `A component was not found for the element ${route.element}`
+          );
+        }
+
+        return (
+          <Route key={route.id} path={route.path} element={<Component />} />
+        );
+      });
+    } else {
+      return <Route path="/" element={<Home />} />;
+    }
+  }
+  if (!user) {
     return (
-        <UserContext.Provider value={user}>
-            <div className="App">{renderRoutes()}</div>
-        </UserContext.Provider>
+      <>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100vh",
+            backgroundColor: "white",
+                    overflowY: "hidden",
+            
+          }}
+        >
+          <img src="/OASIS-logo.jpg" width={"10%"} alt="" />
+        </div>
+  
+      </>
     );
+  }
+  return (
+    <UserContext.Provider value={user}>
+      <Routes>{renderRoutes()}</Routes>
+    </UserContext.Provider>
+  );
 }
 
 export default App;
