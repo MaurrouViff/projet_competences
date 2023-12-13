@@ -153,9 +153,7 @@ function App() {
 
   return (
     <UserContext.Provider value={user}>
-      <Routes>
-    
-        {renderRoutes()}</Routes>
+      <Routes>{renderRoutes()}</Routes>
     </UserContext.Provider>
   );
 }
