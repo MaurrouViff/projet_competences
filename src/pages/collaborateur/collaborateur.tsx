@@ -7,6 +7,11 @@ import { UserContext } from "../../App.tsx";
 export function Collaborateur() {
   const user = useContext(UserContext);
   const role = sessionStorage.getItem("role");
+
+  
+
+  
+
   return (
     <>
       <Layout>

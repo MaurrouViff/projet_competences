@@ -91,3 +91,5 @@ export function Salarie() {
     </div>
   );
 }
+
+export default Salarie; 

@@ -70,6 +70,7 @@ export function Evaluations() {
     }
   }
 
+
   return (
     <div className="skills salarie">
       <Layout>

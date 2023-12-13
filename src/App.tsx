@@ -1,7 +1,7 @@
 import "./App.css";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState, createContext } from "react";
-
+import React from "react";
 
 import { Home } from "./pages/Home.tsx";
 
@@ -21,96 +21,141 @@ import { EvaluationsCollaborateur } from "./pages/collaborateur/params/Evaluatio
 
 import supabase from "./lib/supabaseClient.ts";
 
+// import loading
+import { BeatLoader } from "react-spinners";
+import { SaladIcon } from "lucide-react";
+
 export const UserContext = createContext(null);
 
 function App() {
+  const [authChecked, setAuthChecked] = useState(false);
+  const [routes, setRoutes] = useState([]);
 
-    const [authChecked, setAuthChecked] = useState(false);
+  // Add state for user
+  const [user, setUser] = useState(false);
 
-    // Add state for user
-    const [user, setUser] = useState(null);
+  async function getRole(user) {
+    const { data, error } = await supabase
+      .from("salarie")
+      .select("role")
+      .eq("id", user.id);
 
-    function getUser(userID) {
-        supabase
-            .from("salarie")
-            .select("*")
-            .eq("id", userID)
-            .then((data) => {
-                setUser(data.data[0]);
-            });
+    if (error) {
+      console.error("Error fetching role:", error);
+      return null;
+    } else {
+      return data[0].role;
+    }
+  }
+
+  useEffect(() => {
+    if (user) {
+      getRole(user);
+    } else {
+      setRoutes([]);
+    }
+  }, [user]);
+
+  function getUser(userID) {
+    supabase
+      .from("salarie")
+      .select("*")
+      .eq("id", userID)
+      .then((data) => {
+        setUser(data.data[0]);
+      });
+  }
+
+  // function getRole(id_role) {
+  //   supabase
+  //     .from("role")
+  //     .select("*")
+  //     .eq("id", id_role)
+  //     .then((data) => {
+  //       console.log(data.data[0].id);
+  //     });
+  // }
+
+  useEffect(() => {
+    async function checkAuth() {
+      const { data } = await supabase.auth.getUser();
+
+      const userID = data.user?.id;
+      getUser(userID);
+      setAuthChecked(true);
     }
 
-    // function getRole(id_role) {
-    //   supabase
-    //     .from("role")
-    //     .select("*")
-    //     .eq("id", id_role)
-    //     .then((data) => {
-    //       console.log(data.data[0].id);
-    //     });
-    // }
+    if (sessionStorage.getItem("token")) {
+    } else {
+      setAuthChecked(true);
+    }
+    checkAuth();
+  }, []);
 
-    useEffect(() => {
-        async function checkAuth() {
-            const { data } = await supabase.auth.getUser();
+  async function getRoutes(role) {
+    const { data, error } = await supabase
+      .from("routes")
+      .select("*")
+      .eq("id_role", role);
 
-            const userID = data.user?.id;
-            getUser(userID);
-            setAuthChecked(true);
+    if (error) {
+      console.error("Error fetching routes:", error);
+    } else {
+      setRoutes(data);
+    }
+  }
+
+  useEffect(() => {
+    async function loadRoutes() {
+      if (user) {
+        const role = await getRole(user);
+        if (role) {
+          getRoutes(role);
         }
-
-        checkAuth();
-    }, []);
-
-    function renderRoutes() {
-        if (!authChecked) {
-            return null;
-        }
-
-        if (user?.role === 2) {
-            // RH
-            return (
-                <Routes>
-                    <Route path="/" element={<Rh />} />
-                    <Route path="/rh" element={<Rh />} />
-                    <Route path="/rh/salarie" element={<Salarie />} />
-                    <Route path="/rh/skills" element={<Skills />} />
-                    <Route path="/rh/evaluations" element={<Evaluations />} />
-                    <Route path="/*" element={<Rh />} />
-                </Routes>
-            );
-        } else if (user?.role === 1) {
-            // Collaborateur
-            return (
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/collaborateur" element={<Collaborateur />} />
-                    <Route
-                        path="/collaborateur/skills"
-                        element={<SkillsCollaborateur />}
-                    />
-                    <Route
-                        path="/collaborateur/eval"
-                        element={<EvaluationsCollaborateur />}
-                    />
-                    <Route path="/*" element={<Collaborateur />} />
-                </Routes>
-            );
-        } else {
-            return (
-                <Routes>
-                    <Route path="/" element={<Home />} />
-
-                </Routes>
-            );
-        }
+      }
     }
 
-    return (
-        <UserContext.Provider value={user}>
-            <div className="App">{renderRoutes()}</div>
-        </UserContext.Provider>
-    );
+    loadRoutes();
+  }, [user]);
+
+  const componentMap = {
+    Home,
+    Rh,
+    Salarie,
+    Skills,
+    Evaluations,
+    Collaborateur,
+    SkillsCollaborateur,
+    EvaluationsCollaborateur,
+  };
+
+  function renderRoutes() {
+    console.log(routes);
+    if (routes && routes.length > 0) {
+      return routes.map((route) => {
+        const Component = componentMap[route.element];
+
+        if (!Component) {
+          throw new Error(
+            `A component was not found for the element ${route.element}`
+          );
+        }
+
+        console.log(route);
+        return (
+          <Route key={route.id} path={route.path} element={<Component />} />
+        );
+      });
+    } else {
+      return <Route path="/" element={<Home />}></Route>;
+    }
+  }
+
+  return (
+    <UserContext.Provider value={user}>
+      <Routes>{renderRoutes()}</Routes>
+    </UserContext.Provider>
+  );
 }
 
 export default App;
