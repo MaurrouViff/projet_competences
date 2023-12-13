@@ -50,6 +50,8 @@ function App() {
   useEffect(() => {
     if (user) {
       getRole(user);
+    } else {
+      setRoutes([]);
     }
   }, [user]);
 
@@ -104,12 +106,17 @@ function App() {
 
   useEffect(() => {
     async function loadRoutes() {
-      const role = await getRole(user);
-      getRoutes(role);
+      if (user) {
+        const role = await getRole(user);
+        if (role) {
+          getRoutes(role);
+        }
+      }
     }
 
     loadRoutes();
   }, [user]);
+
   const componentMap = {
     Home,
     Rh,
@@ -122,7 +129,6 @@ function App() {
   };
 
   function renderRoutes() {
-    console.log(routes);
     if (routes && routes.length > 0) {
       return routes.map((route) => {
         const Component = componentMap[route.element];
@@ -138,12 +144,7 @@ function App() {
         );
       });
     } else {
-      return (
-        <>
-          <Route path="/login" element={<Home />} />
-          <Route path="/*" element={<Navigate to="/login" />} />;
-        </>
-      );
+      return <Route path="/" element={<Home />}></Route>;
     }
   }
 

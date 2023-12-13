@@ -30,25 +30,12 @@ export function EvaluationsCollaborateur() {
   const [selectedEval, setSelectedEval] = useState<string | null>(null);
 
   const [loading, setLoading] = useState(false);
-  const [isLoadingUser, setIsLoadingUser] = useState(true);
 
-  useEffect(() => {
-    async function loadUser() {
-      // Start loading the user data
-      setIsLoadingUser(true);
-
-      // Load the user data here
-      // ...
-
-      // Finished loading the user data
-      setIsLoadingUser(false);
-    }
-
-    loadUser();
-  }, []);
+  const user = useContext(UserContext);
 
   useEffect(() => {
     async function readEvaluation() {
+      setLoading(true);
       try {
         const { data: evaluation, error } = await supabase
           .from("evaluation")
@@ -69,6 +56,7 @@ export function EvaluationsCollaborateur() {
       } catch (error) {
         console.error(error);
       }
+      setLoading(false);
     }
     readEvaluation();
   }, []);
@@ -108,46 +96,39 @@ export function EvaluationsCollaborateur() {
     }
   }
 
-  if (isLoadingUser) {
-    return <div>Loading...</div>;
-  }
-    return (
-      <div className="skills salarie">
-        <Layout>
-          <LayoutCollaborateur />
+  return (
+    <div className="skills salarie">
+      <Layout>
+        <LayoutCollaborateur />
 
+        <div
+          style={{
+            backgroundColor: "#FFF",
+            width: "100%",
+            overflowY: "auto",
+            height: "100vh",
+          }}
+        >
           <div
             style={{
-              backgroundColor: "#FFF",
+              height: "100px",
               width: "100%",
-              overflowY: "auto",
-              height: "100vh",
+              backgroundColor: "#FFF",
+              display: "flex",
+              alignItems: "center",
+              paddingLeft: "30px",
+              fontWeight: "bold",
+              borderBottom: "1px solid #000",
             }}
           >
-            <div
-              style={{
-                height: "100px",
-                width: "100%",
-                backgroundColor: "#FFF",
-                display: "flex",
-                alignItems: "center",
-                paddingLeft: "30px",
-                fontWeight: "bold",
-                borderBottom: "1px solid #000",
-              }}
-            >
-              <h2>Evaluations</h2>
-            </div>
-            <div>{renderEvaluation()}</div>
-            {showDetails && (
-              <Details_Eval
-                setShowModal={setShowDetails}
-                evalID={selectedEval}
-              />
-            )}
+            <h2>Evaluations</h2>
           </div>
-        </Layout>
-      </div>
-    );
-  }
-
+          <div>{renderEvaluation()}</div>
+          {showDetails && (
+            <Details_Eval setShowModal={setShowDetails} evalID={selectedEval} />
+          )}
+        </div>
+      </Layout>
+    </div>
+  );
+}
