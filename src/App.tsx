@@ -23,6 +23,7 @@ import supabase from "./lib/supabaseClient.ts";
 
 // import loading
 import { BeatLoader } from "react-spinners";
+import { SaladIcon } from "lucide-react";
 
 export const UserContext = createContext(null);
 
@@ -129,6 +130,7 @@ function App() {
   };
 
   function renderRoutes() {
+    console.log(routes);
     if (routes && routes.length > 0) {
       return routes.map((route) => {
         const Component = componentMap[route.element];
@@ -139,6 +141,7 @@ function App() {
           );
         }
 
+        console.log(route);
         return (
           <Route key={route.id} path={route.path} element={<Component />} />
         );
@@ -150,7 +153,9 @@ function App() {
 
   return (
     <UserContext.Provider value={user}>
-      <Routes>{renderRoutes()}</Routes>
+      <Routes>
+    
+        {renderRoutes()}</Routes>
     </UserContext.Provider>
   );
 }
