@@ -8,9 +8,7 @@ export function Collaborateur() {
   const user = useContext(UserContext);
   const role = sessionStorage.getItem("role");
 
-  if (!user) {
-    return <div>Loading...</div>;
-  }
+  
 
   return (
     <>

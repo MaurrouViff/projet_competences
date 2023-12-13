@@ -33,7 +33,25 @@ function App() {
   // Add state for user
   const [user, setUser] = useState(false);
 
-  const role = sessionStorage.getItem("role");
+  async function getRole(user) {
+    const { data, error } = await supabase
+      .from("salarie")
+      .select("role")
+      .eq("id", user.id);
+
+    if (error) {
+      console.error("Error fetching role:", error);
+      return null;
+    } else {
+      return data[0].role;
+    }
+  }
+
+  useEffect(() => {
+    if (user) {
+      getRole(user);
+    }
+  }, [user]);
 
   function getUser(userID) {
     supabase
@@ -64,21 +82,34 @@ function App() {
       setAuthChecked(true);
     }
 
-    async function getRoutes(id_role) {
-      supabase
-        .from("routes")
-        .select("*")
-        .eq("id_role", id_role)
-        .then((data) => {
-          setRoutes(data.data);
-        });
+    if (sessionStorage.getItem("token")) {
+    } else {
+      setAuthChecked(true);
     }
-
-    getRoutes(role);
-
     checkAuth();
   }, []);
 
+  async function getRoutes(role) {
+    const { data, error } = await supabase
+      .from("routes")
+      .select("*")
+      .eq("id_role", role);
+
+    if (error) {
+      console.error("Error fetching routes:", error);
+    } else {
+      setRoutes(data);
+    }
+  }
+
+  useEffect(() => {
+    async function loadRoutes() {
+      const role = await getRole(user);
+      getRoutes(role);
+    }
+
+    loadRoutes();
+  }, [user]);
   const componentMap = {
     Home,
     Rh,
@@ -91,6 +122,7 @@ function App() {
   };
 
   function renderRoutes() {
+    console.log(routes);
     if (routes && routes.length > 0) {
       return routes.map((route) => {
         const Component = componentMap[route.element];
@@ -106,24 +138,11 @@ function App() {
         );
       });
     } else {
-      return <Route path="/" element={<Home />} />;
-    }
-  }
-
-  if (!routes) {
-    if (!user) {
       return (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "100vh",
-            backgroundColor: "white",
-          }}
-        >
-          <img src="/OASIS-logo.jpg" alt="" />
-        </div>
+        <>
+          <Route path="/login" element={<Home />} />
+          <Route path="/*" element={<Navigate to="/login" />} />;
+        </>
       );
     }
   }
