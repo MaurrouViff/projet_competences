@@ -28,9 +28,6 @@ export function AjoutCompetences({ setShowModal }: AjoutCompetencesProps) {
   const [salaries, setSalaries] = useState<Salarie[]>([]);
   const [selectedBloc, setSelectedBloc] = useState<string | null>(null);
 
-  const handleCompChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedEvaluation(parseInt(e.target.value));
-  }
 
 
 
