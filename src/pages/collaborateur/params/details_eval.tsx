@@ -1,28 +1,23 @@
-// import {Modal} from "../../../components/Modal.tsx";
 import "../../../assets/css/modal.css";
 import { X } from "lucide-react";
-import { useState, useEffect } from "react";
-
-// import supabase
+import { useState, useEffect, useRef } from "react";
 import supabase from "../../../lib/supabaseClient.ts";
-
-
-import {BeatLoader} from "react-spinners";
+import { BeatLoader } from "react-spinners";
+import jsPDF from "jspdf";
 
 export function Details_Eval({
                                  setShowModal,
                                  evalID,
-                             }: // parameters
-                                 {
-                                     setShowModal: (show: boolean) => void;
-                                     evalID: string;
-                                     // define type for parameters
-                                 }) {
+                             }: {
+    setShowModal: (show: boolean) => void;
+    evalID: string;
+}) {
     interface Evaluation {
         idevaluation: number;
         remarque: string;
         nom: string;
         idsalarie: number;
+        note: number; // Ajout de la propriété note
     }
 
     interface Salarie {
@@ -36,6 +31,8 @@ export function Details_Eval({
     const [selectedEval, setSelectedEval] = useState<Evaluation | null>(null);
     const [selectedSalarie, setSelectedSalarie] = useState<Salarie | null>(null);
     const [loading, setLoading] = useState(true);
+    const [noteValue, setNoteValue] = useState<number>(0);
+    const [noteLabel, setNoteLabel] = useState<string>("");
 
     useEffect(() => {
         async function getSalarie(id_salarie: number) {
@@ -65,6 +62,17 @@ export function Details_Eval({
             } else if (evaluation && evaluation.length > 0) {
                 setSelectedEval(evaluation[0]);
                 getSalarie(evaluation[0].idsalarie);
+
+                // Determine the note label
+                const note = evaluation[0].note;
+                setNoteValue(note);
+                if (note >= 0 && note <= 33) {
+                    setNoteLabel("Remaque : mauvais");
+                } else if (note > 33 && note <= 66) {
+                    setNoteLabel("Remarque : moyen");
+                } else {
+                    setNoteLabel("Remarque : très bon");
+                }
             } else {
                 setSelectedEval(null);
             }
@@ -72,6 +80,17 @@ export function Details_Eval({
 
         readEvaluation();
     }, [evalID]);
+
+    const componentRef = useRef<HTMLDivElement>(null);
+
+    const handleExportPDF = () => {
+        if (componentRef.current) {
+            const pdf = new jsPDF();
+            pdf.addHTML(componentRef.current, () => {
+                pdf.save("evaluation_details.pdf");
+            });
+        }
+    };
 
     if (loading) {
         return (
@@ -81,7 +100,6 @@ export function Details_Eval({
                         <a onClick={() => setShowModal(false)}>
                             <X style={{ cursor: "pointer" }} />
                         </a>
-
                         <BeatLoader color="#000000" />
                     </div>
                 </div>
@@ -91,19 +109,21 @@ export function Details_Eval({
 
     return (
         <>
-            {/*<Modal/>*/}
             <div className="modal">
-                <div className="container">
+                <div className="container" ref={componentRef}>
                     <a onClick={() => setShowModal(false)}>
                         <X style={{ cursor: "pointer" }} />
                     </a>
 
                     <h2>{selectedEval?.nom}</h2>
                     <h3>{selectedEval?.remarque}</h3>
-                    <h4>Salarié concerné : {selectedSalarie?.prenom + ' ' + selectedSalarie?.nom}</h4>
+                    <h4>
+                        Salarié concerné : {selectedSalarie?.prenom + " " + selectedSalarie?.nom}
+                    </h4>
+                    <h4>Note : {noteValue} - {noteLabel}</h4>
                 </div>
             </div>
-            {/*style={{width: "80vw", height: "80vh", backgroundColor: "#333", position: "absolute", bottom: 0, right: 0}}*/}
+            <button onClick={handleExportPDF}>Exporter en PDF</button>
         </>
     );
 }

@@ -25,7 +25,7 @@ dist-ssr
 *.sw?
 
 # Env file
-.env
+
 
 # tests API 
 api.http

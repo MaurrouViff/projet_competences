@@ -1,4 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
+// SkillsCollaborateur.tsx
+import React, { useEffect, useState } from "react";
 import supabase from "../../../lib/supabaseClient.ts";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
@@ -6,7 +7,6 @@ import { Layout } from "../layout.tsx";
 import { LayoutCollaborateur } from "./layout.tsx";
 import { Details_Eval } from "./details_eval.tsx";
 import { Form } from "react-bootstrap";
-import { UserContext } from "../../../App.tsx"; // Assurez-vous d'avoir correctement défini UserContext
 
 interface Skills {
     id_competence: number;
@@ -22,7 +22,6 @@ export function SkillsCollaborateur() {
     const [showDetails, setShowDetails] = useState(false);
     const [selectedEval, setSelectedEval] = useState<number | null>(null);
     const [loadingSkills, setLoadingSkills] = useState<boolean>(false);
-    const user = useContext(UserContext); // Obtenez les données de l'utilisateur connecté via le contexte
 
     useEffect(() => {
         async function readSkills() {
@@ -30,8 +29,7 @@ export function SkillsCollaborateur() {
                 setLoadingSkills(true);
                 const { data: competence, error } = await supabase
                     .from("comp")
-                    .select("*")
-                    .eq('idsalarie', user.idsalarie); // Filtrez les compétences par idsalarie
+                    .select("*");
 
                 if (error) {
                     console.error(
@@ -52,10 +50,8 @@ export function SkillsCollaborateur() {
             }
         }
 
-        if (user.idsalarie) { // Assurez-vous que idsalarie est disponible dans les données de l'utilisateur
-            readSkills();
-        }
-    }, [user.idsalarie]); // Exécutez l'effet à chaque changement de idsalarie
+        readSkills();
+    }, []);
 
     async function exportSkillsToPDF() {
         const doc = new jsPDF();
