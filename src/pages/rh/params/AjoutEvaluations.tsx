@@ -26,7 +26,6 @@ export function AjoutEvaluations({ setShowModalEval }: AjoutEvaluationProps) {
   const [salaries, setSalaries] = useState<Salarie[]>([]);
   const [selectedEvaluation, setSelectedEvaluation] = useState<number | null>(null);
   const [selectedSalarie, setSelectedSalarie] = useState<number | null>(null);
-  const [selectedNote, setSelectedNote] = useState<number | null>(null); // Ajout de l'état pour la note
   const [operationSuccess, setOperationSuccess] = useState<boolean>(false);
   const navigate = useNavigate();
 
@@ -38,12 +37,8 @@ export function AjoutEvaluations({ setShowModalEval }: AjoutEvaluationProps) {
     setSelectedSalarie(parseInt(e.target.value));
   };
 
-  const handleNoteChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedNote(parseInt(e.target.value));
-  };
-
   const handleValiderClick = async () => {
-    if (selectedEvaluation && selectedSalarie && selectedNote) { // Vérification de la sélection de la note
+    if (selectedEvaluation && selectedSalarie) {
       try {
         const { data: affectationData, error: affectationError } = await supabase
             .from("evaluation")
@@ -52,7 +47,6 @@ export function AjoutEvaluations({ setShowModalEval }: AjoutEvaluationProps) {
                   {
                     idevaluation: selectedEvaluation,
                     idsalarie: selectedSalarie,
-                    note: selectedNote, // Ajout de la note
                   },
                 ],
                 { onConflict: ["idevaluation"] }
@@ -140,8 +134,6 @@ export function AjoutEvaluations({ setShowModalEval }: AjoutEvaluationProps) {
             <SelectEvaluationsRH evaluations={evaluations} onChange={handleEvaluationChange} />
             <p>Nom de l'employé :</p>
             <SelectEmployeRH salaries={salaries} onChange={handleSalarieChange} />
-            <p>Note :</p>
-            <SelectNote onChange={handleNoteChange} /> {/* Ajout du composant pour sélectionner la note */}
             <div>
               <button
                   style={{
@@ -174,25 +166,6 @@ export function AjoutEvaluations({ setShowModalEval }: AjoutEvaluationProps) {
       </>
   );
 }
-
-// Composant pour sélectionner la note de 0 à 100
-function SelectNote({ onChange }: { onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void }) {
-  return (
-      <Form.Select className="select-rh" onChange={onChange}>
-        <option>Sélectionner la note</option>
-        {Array.from({ length: 101 }, (_, i) => i).map((note) => (
-            <option key={note} value={note}>
-              {note}
-            </option>
-        ))}
-      </Form.Select>
-  );
-}
-
-
-// Composants pour sélectionner l'employé et l'évaluation restent inchangés
-
-
 
 interface SelectEmployeRHProps {
   salaries: Salarie[];

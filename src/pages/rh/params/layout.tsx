@@ -30,6 +30,10 @@ export function LayoutRH() {
                     <PlusSquare/>
                     Ajouter évaluations
                 </p>
+                <Link to="/rh/creerevaluation">
+                    <PlusSquare/>
+
+                </Link>
             </div>
 
             {showModal && <AjoutCompetences setShowModal={setShowModal}/>}

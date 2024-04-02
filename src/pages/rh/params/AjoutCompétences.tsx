@@ -1,15 +1,13 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
 import { X } from "lucide-react";
 import supabase from "../../../lib/supabaseClient.ts";
-import { useNavigate } from "react-router-dom";
 
 interface comp {
   id_competence: number;
   nom_competence: string;
   nom_bloc: string;
   nom_domaine: string;
-  idsalarie: number; // Clé étrangère vers la table "salarie"
 }
 
 interface Salarie {
@@ -17,7 +15,6 @@ interface Salarie {
   nom: string;
   prenom: string;
 }
-
 
 interface AjoutCompetencesProps {
   setShowModal: (show: boolean) => void;
@@ -27,10 +24,6 @@ export function AjoutCompetences({ setShowModal }: AjoutCompetencesProps) {
   const [competences, setCompetences] = useState<comp[]>([]);
   const [salaries, setSalaries] = useState<Salarie[]>([]);
   const [selectedBloc, setSelectedBloc] = useState<string | null>(null);
-
-
-
-
 
   useEffect(() => {
     // Charger les compétences depuis Supabase
