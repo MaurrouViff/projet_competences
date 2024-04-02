@@ -2,13 +2,7 @@ import { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
 import { X } from "lucide-react";
 import supabase from "../../../lib/supabaseClient.ts";
-
-interface comp {
-  id_competence: number;
-  nom_competence: string;
-  nom_bloc: string;
-  nom_domaine: string;
-}
+import { useNavigate } from "react-router-dom";
 
 interface Salarie {
   idsalarie: number;
@@ -16,22 +10,69 @@ interface Salarie {
   prenom: string;
 }
 
+interface Comp {
+  id_competence: number;
+  nom_competence: string;
+}
+
 interface AjoutCompetencesProps {
   setShowModal: (show: boolean) => void;
 }
 
 export function AjoutCompetences({ setShowModal }: AjoutCompetencesProps) {
-  const [competences, setCompetences] = useState<comp[]>([]);
+  const [competences, setCompetences] = useState<Comp[]>([]);
   const [salaries, setSalaries] = useState<Salarie[]>([]);
-  const [selectedBloc, setSelectedBloc] = useState<string | null>(null);
+  const [selectedCompetence, setSelectedCompetence] = useState<number | null>(null);
+  const [selectedSalarie, setSelectedSalarie] = useState<number | null>(null);
+  const [operationSuccess, setOperationSuccess] = useState<boolean>(false);
+  const navigate = useNavigate();
+
+  const handleCompetenceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedCompetence(parseInt(e.target.value));
+  };
+
+  const handleSalarieChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedSalarie(parseInt(e.target.value));
+  };
+
+  const handleValiderClick = async () => {
+    if (selectedCompetence && selectedSalarie) {
+      try {
+        const { data: associationData, error: associationError } = await supabase
+            .from("comp")
+            .upsert(
+                [
+                  {
+                    id_competence: selectedCompetence,
+                    idsalarie: selectedSalarie,
+                  },
+                ],
+                { onConflict: ["id_competence"] }
+            );
+
+        if (associationError) {
+          console.error("Erreur lors de l'association de la compétence:", associationError);
+          return;
+        }
+
+        setOperationSuccess(true);
+        setTimeout(() => {
+          setOperationSuccess(false);
+          setShowModal(false);
+          navigate("/rh/competences"); // Naviguer vers la page des compétences
+        }, 2000); // Afficher "Opération réussie" pendant 2 secondes
+      } catch (error) {
+        console.error("Erreur lors de l'association de la compétence:", error);
+      }
+    }
+  };
 
   useEffect(() => {
-    // Charger les compétences depuis Supabase
     async function chargerCompetences() {
       try {
         const { data, error } = await supabase
             .from("comp")
-            .select("id_competence, nom_competence, nom_bloc");
+            .select("id_competence, nom_competence");
 
         if (error) {
           console.error(
@@ -41,8 +82,7 @@ export function AjoutCompetences({ setShowModal }: AjoutCompetencesProps) {
           return;
         }
 
-        // Mettre à jour l'état local avec les compétences
-        setCompetences(data as comp[]);
+        setCompetences(data as Comp[]);
       } catch (error) {
         console.error(
             "Erreur lors du chargement des compétences depuis Supabase:",
@@ -51,7 +91,6 @@ export function AjoutCompetences({ setShowModal }: AjoutCompetencesProps) {
       }
     }
 
-    // Charger les employés depuis Supabase
     async function chargerSalaries() {
       try {
         const { data, error } = await supabase
@@ -66,7 +105,6 @@ export function AjoutCompetences({ setShowModal }: AjoutCompetencesProps) {
           return;
         }
 
-        // Mettre à jour l'état local avec les employés
         setSalaries(data as Salarie[]);
       } catch (error) {
         console.error(
@@ -81,19 +119,6 @@ export function AjoutCompetences({ setShowModal }: AjoutCompetencesProps) {
     chargerSalaries();
   }, []); // Le tableau vide assure que l'effet ne se déclenche qu'une seule fois au montage
 
-  const blocs = [...new Set(competences.map((comp) => comp.nom_bloc))];
-
-  const handleChangeBloc = (
-      event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    const selectedBloc = event.target.value;
-    setSelectedBloc(selectedBloc === "Sélectionner un bloc" ? null : selectedBloc);
-  };
-
-  const competencesFiltrees = selectedBloc
-      ? competences.filter((comp) => comp.nom_bloc === selectedBloc)
-      : [];
-
   return (
       <>
         <div className="modal">
@@ -103,72 +128,75 @@ export function AjoutCompetences({ setShowModal }: AjoutCompetencesProps) {
             </a>
 
             <h2>Ajouter une compétence</h2>
-            <p>Nom du bloc :</p>
-            <SelectBloc blocs={blocs} onChange={handleChangeBloc} />
-            <p>Nom de l'évaluation :</p>
-            <SelectCompetenceRH competences={competencesFiltrees} />
+            <p>Nom de la compétence :</p>
+            <SelectCompetencesRH competences={competences} onChange={handleCompetenceChange} />
             <p>Nom de l'employé :</p>
-            <SelectEmployeRH salaries={salaries} />
-
-            <button
-                style={{
-                  backgroundColor: "#FFF",
-                  border: "1px solid blue",
-                  borderRadius: "4px",
-                  padding: "8px 16px",
-                  color: "BLUE",
-                }}
-                onClick={() => setShowModal(true)}
-            >
-              Ajouter
-            </button>
+            <SelectEmployeRH salaries={salaries} onChange={handleSalarieChange} />
+            <div>
+              <button
+                  style={{
+                    backgroundColor: "#FFF",
+                    border: "1px solid #002aff",
+                    borderRadius: "4px",
+                    padding: "8px 16px",
+                    color: "#002aff",
+                  }}
+                  onClick={() => setShowModal(false)}
+              >
+                Annuler
+              </button>
+              <button
+                  style={{
+                    backgroundColor: "#FFF",
+                    border: "1px solid #1cff00",
+                    borderRadius: "4px",
+                    padding: "8px 16px",
+                    color: "#1cff00",
+                  }}
+                  onClick={handleValiderClick}
+              >
+                Valider
+              </button>
+            </div>
+            {operationSuccess && <p>Opération réussie</p>}
           </div>
         </div>
       </>
   );
 }
 
-interface SelectBlocProps {
-  blocs: string[];
-  onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+interface SelectCompetencesRHProps {
+  competences: Comp[];
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
-function SelectBloc({ blocs, onChange }: SelectBlocProps) {
+function SelectCompetencesRH({ competences, onChange }: SelectCompetencesRHProps) {
   return (
       <Form.Select className="select-rh" onChange={onChange}>
-        <option>Sélectionner un bloc</option>
-        {blocs.map((bloc, index) => (
-            <option key={index}>{bloc}</option>
-        ))}
-      </Form.Select>
-  );
-}
-
-interface SelectCompetenceRHProps {
-  competences: comp[];
-}
-
-function SelectCompetenceRH({ competences }: SelectCompetenceRHProps) {
-  return (
-      <Form.Select className="select-rh">
-        <option>Sélectionner une compétence</option>
+        <option>Sélectionner la compétence</option>
         {competences.map((comp) => (
-            <option key={comp.id_competence}>{comp.nom_competence}</option>
+            <option key={comp.id_competence} value={comp.id_competence}>
+              {comp.nom_competence}
+            </option>
         ))}
       </Form.Select>
   );
 }
+
 
 interface SelectEmployeRHProps {
   salaries: Salarie[];
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
-function SelectEmployeRH({ salaries }: SelectEmployeRHProps) {
+function SelectEmployeRH({ salaries, onChange }: SelectEmployeRHProps) {
   return (
-      <Form.Select className="select-rh">
+      <Form.Select className="select-rh" onChange={onChange}>
         <option>Sélectionner l'employé</option>
         {salaries.map((salarie) => (
-            <option key={salarie.idsalarie}>{`${salarie.prenom} ${salarie.nom}`}</option>
+            <option key={salarie.idsalarie} value={salarie.idsalarie}>
+              {`${salarie.prenom} ${salarie.nom}`}
+            </option>
         ))}
       </Form.Select>
   );
