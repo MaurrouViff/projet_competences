@@ -1,6 +1,6 @@
 # React + TypeScript + Vite
 
-### Serveur : [http://10.0.52.67/](http://10.0.52.67/)
+### Serveur : [](http://10.0.52.67/)
 
 ```
 RH : 
