@@ -67,7 +67,7 @@ export function Details_Eval({
                 const note = evaluation[0].note;
                 setNoteValue(note);
                 if (note >= 0 && note <= 33) {
-                    setNoteLabel("Remaque : mauvais");
+                    setNoteLabel("Remarque : mauvais");
                 } else if (note > 33 && note <= 66) {
                     setNoteLabel("Remarque : moyen");
                 } else {
