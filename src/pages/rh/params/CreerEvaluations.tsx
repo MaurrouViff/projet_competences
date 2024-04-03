@@ -99,7 +99,7 @@ export function CreerEvaluation({ setShowModalCreer }: AjoutEvaluationProps) {
                         <X style={{ cursor: "pointer" }} />
                     </a>
 
-                    <h2>Ajouter une évaluation</h2>
+                    <h2>Créer une évaluation</h2>
                     <div>
                         <p>Nom de l'évaluation :</p>
                         <input type="text" value={nomEvaluation} onChange={handleNomEvaluationChange} />

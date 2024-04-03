@@ -21,23 +21,32 @@ export function Skills() {
     const [selected, setSelected] = useState<number | null>(null);
 
     // <Skills[] | null>
-    const [skills, setSkills] = useState(null);
+    const [skills, setSkills] = useState<Skills[] | null>(null);
+    const [skillsCount, setSkillsCount] = useState<number>(0);
 
     useEffect(() => {
         async function readSkills() {
-            let { data: competence, error } = await supabase.from("comp").select("*");
+            try {
+                const { data: competence, error } = await supabase.from("comp").select("*");
 
-            if (error) {
-                console.log(error);
+                if (error) {
+                    console.error("Erreur lors de la récupération des compétences:", error);
+                    return;
+                }
+
+                setSkills(competence);
+                setSkillsCount(competence.length);
+            } catch (error) {
+                console.error("Erreur lors de la récupération des compétences:", error);
             }
-            return setSkills(competence);
         }
 
         readSkills();
     }, []);
+
     function renderSkills() {
         if (skills && skills.length > 0) {
-            return skills?.map((skill, index) => (
+            return skills.map((skill, index) => (
                 <div
                     key={index}
                     style={{
@@ -87,12 +96,14 @@ export function Skills() {
                             backgroundColor: "#FFF",
                             display: "flex",
                             alignItems: "center",
+                            justifyContent: "space-between",
                             paddingLeft: "30px",
                             fontWeight: "bold",
                             borderBottom: "1px solid #000",
                         }}
                     >
                         <h2>Compétences</h2>
+                        <p>{skillsCount} compétences</p>
                     </div>
 
                     <div>{renderSkills()}</div>
