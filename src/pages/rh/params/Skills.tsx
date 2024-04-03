@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { Supprimer } from "./supprimer.tsx";
 import supabase from "../../../lib/supabaseClient.ts";
 
-import { Details_Eval } from "./details_eval.tsx";
+
 
 import BeatLoader from "react-spinners/BeatLoader";
 
@@ -17,8 +17,7 @@ interface Skills {
 
 export function Skills() {
     const [showModal, setShowModal] = useState(false);
-    const [showDetails, setShowDetails] = useState(false);
-    const [selected, setSelected] = useState<number | null>(null);
+
 
     // <Skills[] | null>
     const [skills, setSkills] = useState<Skills[] | null>(null);
